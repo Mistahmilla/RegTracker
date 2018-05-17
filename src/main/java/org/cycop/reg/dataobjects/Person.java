@@ -12,16 +12,6 @@ public class Person extends DataObject{
     public Person(){
     }
 
-    public Person(String FirstName, String LastName){
-        setFirstName(FirstName);
-        setLastName(LastName);
-    }
-
-    public Person (Long PersonID, String FirstName, String LastName, LocalDate BirthDate){
-        this(FirstName, LastName);
-        setBirthDate(BirthDate);
-    }
-
     public void setFirstName(String FirstName){
         firstName = FirstName;
     }
