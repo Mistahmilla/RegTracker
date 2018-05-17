@@ -8,6 +8,21 @@ public class Person extends DataObject{
     private String lastName;
     private LocalDate birthDate;
     private Long personID;
+    private Gender gender;
+
+    public enum Gender {
+        M("Male") , F("Female");
+
+        private String genderDescription;
+
+        Gender(String desc){
+            this.genderDescription=desc;
+        }
+
+        public String getGenderDescription(){
+            return this.genderDescription;
+        }
+    }
 
     public Person(){
     }
@@ -46,5 +61,13 @@ public class Person extends DataObject{
 
     public String toString(){
         return lastName + ", " + firstName;
+    }
+
+    public void setGender(Gender gender){
+        this.gender = gender;
+    }
+
+    public Gender getGender(){
+        return this.gender;
     }
 }

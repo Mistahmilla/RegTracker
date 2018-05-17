@@ -44,6 +44,8 @@ public class PersonDAOImpl implements PersonDAO {
                     p.setPersonID(rs.getLong("PER_SID"));
                     p.setFirstName(rs.getString("PER_FIRST_NM"));
                     p.setLastName(rs.getString("PER_LAST_NM"));
+                    p.setBirthDate(rs.getDate("BIRTH_D").toLocalDate());
+
                     return p;
                 }
                 return null;
