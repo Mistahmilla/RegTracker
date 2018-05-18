@@ -37,7 +37,7 @@ public class MvcConfiguration implements WebMvcConfigurer {
     }
 
     @Bean
-    public PersonDAO getContactDAO() {
+    public PersonDAO getPersonDAO() {
         return new PersonDAOImpl(getDataSource());
     }
 

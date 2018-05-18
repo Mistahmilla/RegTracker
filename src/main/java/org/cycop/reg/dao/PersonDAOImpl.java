@@ -4,7 +4,6 @@ import org.cycop.reg.dataobjects.Person;
 import java.util.List;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.List;
 import javax.sql.DataSource;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -35,8 +34,10 @@ public class PersonDAOImpl implements PersonDAO {
     }
 
     public Person get(Long personId) {
-        String sql = "SELECT * FROM T_PER WHERE PER_SID = "+personId;
-        return jdbcTemplate.query(sql, new ResultSetExtractor<Person>() {
+        String sql = "SELECT * FROM T_PER WHERE PER_SID = ?";
+        Object[] params = new Object[1];
+        params[1] = personId;
+        return jdbcTemplate.query(sql, params, new ResultSetExtractor<Person>() {
             @Override
             public Person extractData(ResultSet rs) throws SQLException, DataAccessException {
                 if(rs.next()){

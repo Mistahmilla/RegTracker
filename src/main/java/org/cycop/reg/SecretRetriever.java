@@ -5,35 +5,32 @@ import com.amazonaws.services.secretsmanager.AWSSecretsManager;
 import com.amazonaws.services.secretsmanager.AWSSecretsManagerClientBuilder;
 import com.amazonaws.services.secretsmanager.model.*;
 
-import java.nio.ByteBuffer;
-
 public class SecretRetriever {
 
     private String endPoint;
     private String region;
 
-    public SecretRetriever(String EndPoint, String Region){
-        endPoint = EndPoint;
-        region = Region;
+    public SecretRetriever(String endPoint, String region){
+        this.endPoint = endPoint;
+        this.region = region;
     }
 
-    public String getSecret(String SecretName){
+    public String getSecret(String secretName){
         AwsClientBuilder.EndpointConfiguration config = new AwsClientBuilder.EndpointConfiguration(endPoint, region);
         AWSSecretsManagerClientBuilder clientBuilder = AWSSecretsManagerClientBuilder.standard();
         clientBuilder.setEndpointConfiguration(config);
         AWSSecretsManager client = clientBuilder.build();
 
         String secret;
-        ByteBuffer binarySecretData;
 
         GetSecretValueRequest req = new GetSecretValueRequest();
-        req.setSecretId(SecretName);
+        req.setSecretId(secretName);
         GetSecretValueResult rsp = null;
         try {
             rsp = client.getSecretValue(req);
 
         } catch(ResourceNotFoundException e) {
-            System.out.println("The requested secret " + SecretName + " was not found");
+            System.out.println("The requested secret " + secretName + " was not found");
         } catch (InvalidRequestException e) {
             System.out.println("The request was invalid due to: " + e.getMessage());
         } catch (InvalidParameterException e) {
@@ -49,9 +46,6 @@ public class SecretRetriever {
         if(rsp.getSecretString() != null) {
             secret = rsp.getSecretString();
             return secret;
-        }
-        else {
-            binarySecretData = rsp.getSecretBinary();
         }
 
         return "";

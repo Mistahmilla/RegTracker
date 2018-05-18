@@ -27,24 +27,24 @@ public class Person extends DataObject{
     public Person(){
     }
 
-    public void setFirstName(String FirstName){
-        firstName = FirstName;
+    public void setFirstName(String firstName){
+        this.firstName = firstName;
     }
 
     public String getFirstName(){
         return firstName;
     }
 
-    public void setLastName(String LastName){
-        lastName = LastName;
+    public void setLastName(String lastName){
+        this.lastName = lastName;
     }
 
     public String getLastName(){
         return lastName;
     }
 
-    public void setBirthDate(LocalDate BirthDate){
-        birthDate = BirthDate;
+    public void setBirthDate(LocalDate birthDate){
+        this.birthDate = birthDate;
     }
 
     public LocalDate getBirthDate(){
