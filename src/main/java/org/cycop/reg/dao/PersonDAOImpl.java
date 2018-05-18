@@ -1,5 +1,6 @@
 package org.cycop.reg.dao;
 
+import org.cycop.reg.dao.mapper.PersonMapper;
 import org.cycop.reg.dataobjects.Person;
 import java.util.List;
 import java.sql.ResultSet;
@@ -13,9 +14,11 @@ import org.springframework.jdbc.core.RowMapper;
 public class PersonDAOImpl implements PersonDAO {
 
     private JdbcTemplate jdbcTemplate;
+    private PersonMapper personMapper;
 
     public PersonDAOImpl(DataSource dataSource) {
         jdbcTemplate = new JdbcTemplate(dataSource);
+        personMapper = new PersonMapper();
     }
 
     public void saveOrUpdate(Person person) {
@@ -33,39 +36,16 @@ public class PersonDAOImpl implements PersonDAO {
         jdbcTemplate.update(sql, personId);
     }
 
-    public Person get(Long personId) {
+    public List<Person> get(Long personId) {
         String sql = "SELECT * FROM T_PER WHERE PER_SID = ?";
         Object[] params = new Object[1];
-        params[1] = personId;
-        return jdbcTemplate.query(sql, params, new ResultSetExtractor<Person>() {
-            @Override
-            public Person extractData(ResultSet rs) throws SQLException, DataAccessException {
-                if(rs.next()){
-                    Person p = new Person();
-                    p.setPersonID(rs.getLong("PER_SID"));
-                    p.setFirstName(rs.getString("PER_FIRST_NM"));
-                    p.setLastName(rs.getString("PER_LAST_NM"));
-                    p.setBirthDate(rs.getDate("BIRTH_D").toLocalDate());
-
-                    return p;
-                }
-                return null;
-            }
-        });
+        params[0] = personId;
+        return jdbcTemplate.query(sql, params, personMapper);
     }
 
     public List<Person> list() {
         String sql = "SELECT * FROM T_PER";
-        List<Person> personList = jdbcTemplate.query(sql, new RowMapper<Person>() {
-            @Override
-            public Person mapRow(ResultSet rs, int rowNum) throws SQLException {
-                Person p = new Person();
-                p.setPersonID(rs.getLong("PER_SID"));
-                p.setFirstName(rs.getString("PER_FIRST_NM"));
-                p.setLastName(rs.getString("PER_LAST_NM"));
-                return p;
-            }
-        });
+        List<Person> personList = jdbcTemplate.query(sql, personMapper);
         return personList;
     }
 }

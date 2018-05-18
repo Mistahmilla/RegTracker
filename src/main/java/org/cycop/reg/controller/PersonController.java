@@ -18,11 +18,9 @@ public class PersonController {
     private PersonDAO personDAO;
 
     @RequestMapping(value = "/person", method=GET)
-    public List person(@RequestParam(value="id", defaultValue="0") Long id) {
-        if (id > 0){
-            ArrayList l = new ArrayList();
-            l.add(personDAO.get(id));
-            return l;
+    public List person(@RequestParam(value="personID", defaultValue="0") Long personID) {
+        if (personID > 0){
+            return personDAO.get(personID);
         }else {
             return personDAO.list();
         }

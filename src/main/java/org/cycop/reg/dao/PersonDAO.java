@@ -10,7 +10,7 @@ public interface PersonDAO {
 
     public void delete(Long personId);
 
-    public Person get(Long personId);
+    public List<Person> get(Long personId);
 
     public List<Person> list();
 }
