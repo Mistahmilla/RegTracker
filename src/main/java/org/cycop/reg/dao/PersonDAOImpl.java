@@ -3,13 +3,8 @@ package org.cycop.reg.dao;
 import org.cycop.reg.dao.mapper.PersonMapper;
 import org.cycop.reg.dataobjects.Person;
 import java.util.List;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import javax.sql.DataSource;
-import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.ResultSetExtractor;
-import org.springframework.jdbc.core.RowMapper;
 
 public class PersonDAOImpl implements PersonDAO {
 

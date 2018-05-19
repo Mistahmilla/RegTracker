@@ -25,6 +25,7 @@ public class Person extends DataObject{
     }
 
     public Person(){
+        super();
     }
 
     public void setFirstName(String firstName){
@@ -51,8 +52,8 @@ public class Person extends DataObject{
         return birthDate;
     }
 
-    public void setPersonID(Long PersonID){
-        this.personID = PersonID;
+    public void setPersonID(Long personID){
+        this.personID = personID;
     }
 
     public Long getPersonID(){

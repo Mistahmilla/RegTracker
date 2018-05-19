@@ -48,10 +48,7 @@ public class MvcConfiguration implements WebMvcConfigurer {
     }
 
     @Bean
-    public PersonDAO getPersonDAO() throws Exception {
-        if(getDataSource() == null){
-            throw new Exception("Null data source");
-        }
+    public PersonDAO getPersonDAO()  {
         return new PersonDAOImpl(getDataSource());
     }
 
