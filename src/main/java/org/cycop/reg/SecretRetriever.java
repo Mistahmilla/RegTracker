@@ -4,11 +4,14 @@ import com.amazonaws.client.builder.AwsClientBuilder;
 import com.amazonaws.services.secretsmanager.AWSSecretsManager;
 import com.amazonaws.services.secretsmanager.AWSSecretsManagerClientBuilder;
 import com.amazonaws.services.secretsmanager.model.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class SecretRetriever {
 
     private String endPoint;
     private String region;
+    private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     public SecretRetriever(String endPoint, String region){
         this.endPoint = endPoint;
@@ -30,11 +33,11 @@ public class SecretRetriever {
             rsp = client.getSecretValue(req);
 
         } catch(ResourceNotFoundException e) {
-            System.out.println("The requested secret " + secretName + " was not found");
+            logger.error("The requested secret " + secretName + " was not found",e);
         } catch (InvalidRequestException e) {
-            System.out.println("The request was invalid due to: " + e.getMessage());
+            logger.error("The request was invalid due to: " + e.getMessage(),e);
         } catch (InvalidParameterException e) {
-            System.out.println("The request had invalid params: " + e.getMessage());
+            logger.error("The request had invalid params: " + e.getMessage(),e);
         }
 
         if(rsp == null) {

@@ -12,6 +12,8 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.sql.DataSource;
 import java.io.IOException;
@@ -20,6 +22,7 @@ import java.io.IOException;
 @ComponentScan(basePackages="net.codejava.spring")
 @EnableWebMvc
 public class MvcConfiguration implements WebMvcConfigurer {
+    private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     public DataSource getDataSource() {
         DriverManagerDataSource dataSource = new DriverManagerDataSource();
@@ -33,7 +36,7 @@ public class MvcConfiguration implements WebMvcConfigurer {
         try {
             dbCredential = objectMapper.readValue(secret, Credential.class);
         } catch (IOException e) {
-            e.printStackTrace();
+            logger.error("Failed to retrieve database credentials", e);
             return null;
         }
 
