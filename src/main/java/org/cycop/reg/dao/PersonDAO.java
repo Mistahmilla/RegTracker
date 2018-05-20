@@ -6,7 +6,7 @@ import org.cycop.reg.dataobjects.Person;
 
 public interface PersonDAO {
 
-    public void saveOrUpdate(Person contact);
+    public long saveOrUpdate(Person contact);
 
     public void delete(Long personId);
 

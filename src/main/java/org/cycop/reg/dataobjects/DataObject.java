@@ -1,17 +1,25 @@
 package org.cycop.reg.dataobjects;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 public abstract class DataObject {
 
-    private LocalDate createTime;
-    private LocalDate updateTime;
+    private LocalDateTime createTime;
+    private LocalDateTime updateTime;
 
-    public LocalDate getCreateTime(){
+    public LocalDateTime getCreateTime(){
         return createTime;
     }
 
-    public LocalDate getUpdateTime(){
+    public void setCreateTime(LocalDateTime createTime){
+        this.createTime = createTime;
+    }
+
+    public LocalDateTime getUpdateTime(){
         return updateTime;
+    }
+
+    public void setUpdateTime(LocalDateTime updateTime){
+        this.updateTime = updateTime;
     }
 }

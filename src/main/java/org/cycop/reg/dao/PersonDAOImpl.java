@@ -5,6 +5,8 @@ import org.cycop.reg.dataobjects.Person;
 import java.util.List;
 import javax.sql.DataSource;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.jdbc.support.KeyHolder;
 
 public class PersonDAOImpl implements PersonDAO {
 
@@ -16,13 +18,21 @@ public class PersonDAOImpl implements PersonDAO {
         personMapper = new PersonMapper();
     }
 
-    public void saveOrUpdate(Person person) {
-        if(person.getPersonID() > 0){
-            String sql = "UPDATE T_PER SET PER_FIRST_NM = ?, PER_LAST_NM = ? WHERE PER_SID = ?;";
-            jdbcTemplate.update(sql, person.getFirstName(), person.getLastName(), person.getPersonID());
+    public long saveOrUpdate(Person person) {
+        String genderCode = "";
+
+        if (person.getGender() != null){
+            genderCode = person.getGender().getGenderCode();
+        }
+        if(person.getPersonID() != null){
+            String sql = "UPDATE T_PER SET PER_FIRST_NM = ?, PER_LAST_NM = ?, SEX_C = ?, UPD_T = CURRENT_TIMESTAMP WHERE PER_SID = ?;";
+            jdbcTemplate.update(sql, person.getFirstName(), person.getLastName(), genderCode, person.getPersonID());
+            return person.getPersonID();
         }else{
-            String sql = "INSERT INTO T_PER (PER_FIRST_NM, PER_LAST_NM) VALUES (?, ?);";
-            jdbcTemplate.update(sql, person.getFirstName(), person.getLastName());
+            KeyHolder keyHolder = new GeneratedKeyHolder();
+            String sql = "INSERT INTO T_PER (PER_FIRST_NM, PER_LAST_NM, SEX_C, CRE_T, UPD_T) VALUES (?, ?, ?, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);";
+            jdbcTemplate.update(sql, keyHolder, person.getFirstName(), person.getLastName(), genderCode);
+            return keyHolder.getKey().longValue();
         }
     }
 

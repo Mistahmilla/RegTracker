@@ -22,6 +22,7 @@ public class PersonTest {
         assertEquals(LocalDate.of(2001, 9, 11), p.getBirthDate());
         assertEquals(Person.Gender.F, p.getGender());
         assertEquals("Female", p.getGender().getGenderDescription());
+        assertEquals("F", p.getGender().getGenderCode());
         assertEquals((long)1, (long)p.getPersonID());
     }
 

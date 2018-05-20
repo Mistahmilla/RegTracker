@@ -11,16 +11,22 @@ public class Person extends DataObject{
     private Gender gender;
 
     public enum Gender {
-        M("Male") , F("Female");
+        M("M","Male") , F("F","Female");
 
         private String genderDescription;
+        private String genderCode;
 
-        Gender(String desc){
+        Gender(String code, String desc){
             this.genderDescription=desc;
+            this.genderCode = code;
         }
 
         public String getGenderDescription(){
             return this.genderDescription;
+        }
+
+        public String getGenderCode(){
+            return this.genderCode;
         }
     }
 
