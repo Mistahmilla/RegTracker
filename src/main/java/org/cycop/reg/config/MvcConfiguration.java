@@ -3,7 +3,6 @@ package org.cycop.reg.config;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.cycop.reg.SecretRetriever;
 import org.cycop.reg.dao.PersonDAO;
-import org.cycop.reg.dao.PersonDAOImpl;
 
 import org.cycop.reg.dataobjects.Credential;
 import org.springframework.context.annotation.Bean;
@@ -49,7 +48,7 @@ public class MvcConfiguration implements WebMvcConfigurer {
 
     @Bean
     public PersonDAO getPersonDAO()  {
-        return new PersonDAOImpl(getDataSource());
+        return new PersonDAO(getDataSource());
     }
 
 }

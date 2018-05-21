@@ -3,13 +3,9 @@ package org.cycop.reg.controller;
 import org.cycop.reg.dao.PersonDAO;
 import org.cycop.reg.dataobjects.Person;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-
-import static org.springframework.web.bind.annotation.RequestMethod.DELETE;
-import static org.springframework.web.bind.annotation.RequestMethod.GET;
 
 @RestController
 @RequestMapping("/person")
@@ -24,12 +20,16 @@ public class PersonController {
     }
 
     @GetMapping
-    public List getPerson(){
-        return personDAO.list();
+    public List personSearch(@RequestParam(value="personID", defaultValue="0") long personID, @RequestParam(value="personName") String personName) {
+        if (personID != 0) {
+            return personDAO.get(personID);
+        }
+
+        return personDAO.get(personName);
     }
 
-    @DeleteMapping
-    public void deletePerson(@RequestParam(value="personID") Long personID){
+    @DeleteMapping("/{personID}")
+    public void deletePerson(@PathVariable long personID){
         personDAO.delete(personID);
     }
 
