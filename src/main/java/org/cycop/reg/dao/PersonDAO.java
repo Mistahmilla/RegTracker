@@ -2,11 +2,12 @@ package org.cycop.reg.dao;
 
 import org.cycop.reg.dao.mapper.PersonMapper;
 import org.cycop.reg.dataobjects.Person;
-import java.util.List;
-import javax.sql.DataSource;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
+
+import javax.sql.DataSource;
+import java.util.List;
 
 public class PersonDAO {
 
@@ -61,7 +62,6 @@ public class PersonDAO {
 
     public List<Person> list() {
         String sql = "SELECT * FROM T_PER";
-        List<Person> personList = jdbcTemplate.query(sql, personMapper);
-        return personList;
+        return jdbcTemplate.query(sql, personMapper);
     }
 }
