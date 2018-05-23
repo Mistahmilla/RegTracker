@@ -35,6 +35,9 @@ public class Person extends DataObject{
     }
 
     public void setFirstName(String firstName){
+        if (firstName.length() > 45){
+            throw new IllegalArgumentException("First name exceeds allowable length of 45 characters");
+        }
         this.firstName = firstName;
     }
 
