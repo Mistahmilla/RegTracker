@@ -18,7 +18,7 @@ public class PersonMapper implements RowMapper<Person>{
             p.setBirthDate(resultSet.getDate("BIRTH_D").toLocalDate());
         }
         if(resultSet.getString("SEX_C") != null){
-            p.setGender(Person.Gender.valueOf(resultSet.getString("SEX_C")));
+            p.setGender(resultSet.getString("SEX_C"));
         }
         if(resultSet.getTimestamp("CRE_T") != null){
             p.setCreateTime(resultSet.getTimestamp("CRE_T").toLocalDateTime());

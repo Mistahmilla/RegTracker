@@ -1,8 +1,9 @@
 package org.cycop.reg.dataobjects;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 
-public class Person extends DataObject{
+public class Person extends DataObject implements Serializable {
 
     private String firstName;
     private String lastName;
@@ -73,8 +74,8 @@ public class Person extends DataObject{
         return lastName + ", " + firstName;
     }
 
-    public void setGender(Gender gender){
-        this.gender = gender;
+    public void setGender(String gender){
+        this.gender = Gender.valueOf(gender);
     }
 
     public Gender getGender(){

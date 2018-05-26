@@ -15,7 +15,7 @@ public class PersonTest {
         p.setFirstName("John");
         p.setLastName("Smith");
         p.setBirthDate(LocalDate.of(2001,9,11));
-        p.setGender(Person.Gender.F);
+        p.setGender("F");
         assertEquals("John", p.getFirstName());
         assertEquals("Smith", p.getLastName());
         assertEquals("Smith, John", p.toString());

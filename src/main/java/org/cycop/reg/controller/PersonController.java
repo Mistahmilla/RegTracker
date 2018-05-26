@@ -20,12 +20,14 @@ public class PersonController {
     }
 
     @GetMapping
-    public List personSearch(@RequestParam(value="personID", defaultValue="0") long personID, @RequestParam(value="personName") String personName) {
+    public List personSearch(@RequestParam(value="personID", defaultValue="0") long personID, @RequestParam(value="personName", defaultValue="") String personName) {
         if (personID != 0) {
             return personDAO.get(personID);
         }
-
-        return personDAO.get(personName);
+        if (!personName.equals("")) {
+            return personDAO.get(personName);
+        }
+        return personDAO.get();
     }
 
     @DeleteMapping("/{personID}")

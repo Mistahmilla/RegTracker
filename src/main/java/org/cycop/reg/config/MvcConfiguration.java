@@ -2,17 +2,17 @@ package org.cycop.reg.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.cycop.reg.SecretRetriever;
+import org.cycop.reg.dao.GradeDAO;
 import org.cycop.reg.dao.PersonDAO;
-
 import org.cycop.reg.dataobjects.Credential;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import javax.sql.DataSource;
 import java.io.IOException;
@@ -49,6 +49,11 @@ public class MvcConfiguration implements WebMvcConfigurer {
     @Bean
     public PersonDAO getPersonDAO()  {
         return new PersonDAO(getDataSource());
+    }
+
+    @Bean
+    public GradeDAO getGradeDAO()  {
+        return new GradeDAO(getDataSource());
     }
 
 }

@@ -1,12 +1,17 @@
 package org.cycop.reg.dao;
 
+import com.mysql.jdbc.Statement;
 import org.cycop.reg.dao.mapper.PersonMapper;
 import org.cycop.reg.dataobjects.Person;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.PreparedStatementCreator;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 
 import javax.sql.DataSource;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import java.util.List;
 
 public class PersonDAO {
@@ -32,7 +37,17 @@ public class PersonDAO {
         }else{
             KeyHolder keyHolder = new GeneratedKeyHolder();
             String sql = "INSERT INTO T_PER (PER_FIRST_NM, PER_LAST_NM, SEX_C, CRE_T, UPD_T) VALUES (?, ?, ?, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);";
-            jdbcTemplate.update(sql, keyHolder, person.getFirstName(), person.getLastName(), genderCode);
+            jdbcTemplate.update(new PreparedStatementCreator() {
+                @Override
+                public PreparedStatement createPreparedStatement(Connection connection) throws SQLException {
+                    PreparedStatement p = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+                    p.setString(1, person.getFirstName());
+                    p.setString(2, person.getLastName());
+                    p.setString(3, person.getGender().getGenderCode());
+                    return p;
+                }
+            }, keyHolder);
+
             return keyHolder.getKey().longValue();
         }
     }
@@ -60,8 +75,9 @@ public class PersonDAO {
         return jdbcTemplate.query(sql, params, personMapper);
     }
 
-    public List<Person> list() {
+    public List<Person> get(){
         String sql = "SELECT * FROM T_PER";
         return jdbcTemplate.query(sql, personMapper);
     }
+
 }

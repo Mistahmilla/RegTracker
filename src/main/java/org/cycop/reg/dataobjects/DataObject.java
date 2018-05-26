@@ -1,8 +1,9 @@
 package org.cycop.reg.dataobjects;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 
-public abstract class DataObject {
+public abstract class DataObject implements Serializable {
 
     private LocalDateTime createTime;
     private LocalDateTime updateTime;
