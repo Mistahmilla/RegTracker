@@ -9,9 +9,7 @@ import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 
 import javax.sql.DataSource;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.List;
 
 public class PersonDAO {
@@ -30,20 +28,30 @@ public class PersonDAO {
         if (person.getGender() != null){
             genderCode = person.getGender().getGenderCode();
         }
+
         if(person.getPersonID() != null){
-            String sql = "UPDATE T_PER SET PER_FIRST_NM = ?, PER_LAST_NM = ?, SEX_C = ?, UPD_T = CURRENT_TIMESTAMP WHERE PER_SID = ?;";
-            jdbcTemplate.update(sql, person.getFirstName(), person.getLastName(), genderCode, person.getPersonID());
+            String sql = "UPDATE T_PER SET PER_FIRST_NM = ?, PER_LAST_NM = ?, SEX_C = ?, BIRTH_D = ?, UPD_T = CURRENT_TIMESTAMP WHERE PER_SID = ?;";
+            jdbcTemplate.update(sql, person.getFirstName(), person.getLastName(), genderCode, Date.valueOf(person.getBirthDate()), person.getPersonID());
             return person.getPersonID();
         }else{
             KeyHolder keyHolder = new GeneratedKeyHolder();
-            String sql = "INSERT INTO T_PER (PER_FIRST_NM, PER_LAST_NM, SEX_C, CRE_T, UPD_T) VALUES (?, ?, ?, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);";
+            String sql = "INSERT INTO T_PER (PER_FIRST_NM, PER_LAST_NM, SEX_C, BIRTH_D, CRE_T, UPD_T) VALUES (?, ?, ?, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);";
             jdbcTemplate.update(new PreparedStatementCreator() {
                 @Override
                 public PreparedStatement createPreparedStatement(Connection connection) throws SQLException {
                     PreparedStatement p = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
                     p.setString(1, person.getFirstName());
                     p.setString(2, person.getLastName());
-                    p.setString(3, person.getGender().getGenderCode());
+                    if(person.getGender() == null){
+                        p.setNull(3,Types.NULL);
+                    }else {
+                        p.setString(3, person.getGender().getGenderCode());
+                    }
+                    if(person.getBirthDate() == null){
+                        p.setNull(4, Types.NULL);
+                    }else{
+                        p.setDate(4, Date.valueOf(person.getBirthDate()));
+                    }
                     return p;
                 }
             }, keyHolder);
