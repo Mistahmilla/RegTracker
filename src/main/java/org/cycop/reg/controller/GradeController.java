@@ -1,6 +1,6 @@
 package org.cycop.reg.controller;
 
-import org.cycop.reg.dao.GradeDAO;
+import org.cycop.reg.dataobjects.repositories.GradeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -13,17 +13,20 @@ import java.util.List;
 @RequestMapping("/grade")
 public class GradeController {
 
+    //@Autowired
+    //private GradeDAO gradeDAO;
+
     @Autowired
-    private GradeDAO gradeDAO;
+    private GradeRepository gradeRepo;
 
     @GetMapping("/{gradeCode}")
     public List getGrade(@PathVariable String gradeCode) {
-        return gradeDAO.get(gradeCode);
+        return gradeRepo.getGrade(gradeCode);
     }
 
     @GetMapping
     public List getAllGrades() {
-        return gradeDAO.list();
+        return gradeRepo.getAll();
     }
 
 }
