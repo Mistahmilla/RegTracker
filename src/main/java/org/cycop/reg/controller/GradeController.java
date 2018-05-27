@@ -13,9 +13,6 @@ import java.util.List;
 @RequestMapping("/grade")
 public class GradeController {
 
-    //@Autowired
-    //private GradeDAO gradeDAO;
-
     @Autowired
     private GradeRepository gradeRepo;
 
