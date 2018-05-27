@@ -2,15 +2,12 @@ package org.cycop.reg.dao;
 
 import org.cycop.reg.dao.mapper.GradeMapper;
 import org.cycop.reg.dataobjects.Grade;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.jdbc.core.JdbcTemplate;
 
 import javax.sql.DataSource;
 import java.util.List;
 
 public class GradeDAO {
-    private final Logger logger = LoggerFactory.getLogger(this.getClass());
     private JdbcTemplate jdbcTemplate;
     private GradeMapper gradeMapper;
 
@@ -20,7 +17,6 @@ public class GradeDAO {
     }
 
     public List<Grade> get(String gradeCode) {
-        logger.info("Query in GradeDAO");
         String sql = "SELECT * FROM T_GRADE WHERE GRADE_C = ?";
         Object[] params = new Object[1];
         params[0] = gradeCode;
@@ -28,7 +24,6 @@ public class GradeDAO {
     }
 
     public List<Grade> list() {
-        logger.info("Query in GradeDAO");
         String sql = "SELECT * FROM T_GRADE";
         return jdbcTemplate.query(sql, gradeMapper);
     }
