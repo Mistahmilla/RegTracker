@@ -3,6 +3,7 @@ package org.cycop.reg.dao;
 import com.mysql.jdbc.Statement;
 import org.cycop.reg.dao.mapper.PersonMapper;
 import org.cycop.reg.dataobjects.Person;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.PreparedStatementCreator;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
@@ -15,11 +16,11 @@ import java.util.List;
 public class PersonDAO {
 
     private JdbcTemplate jdbcTemplate;
+    @Autowired
     private PersonMapper personMapper;
 
     public PersonDAO(DataSource dataSource) {
         jdbcTemplate = new JdbcTemplate(dataSource);
-        personMapper = new PersonMapper();
     }
 
     public long saveOrUpdate(Person person) {

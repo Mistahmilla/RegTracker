@@ -2,10 +2,12 @@ package org.cycop.reg.dao.mapper;
 
 import org.cycop.reg.dataobjects.Person;
 import org.springframework.jdbc.core.RowMapper;
+import org.springframework.stereotype.Component;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+@Component
 public class PersonMapper implements RowMapper<Person>{
 
     @Override
