@@ -19,7 +19,6 @@ public class Person extends DataObject {
     private Long personID;
     private Gender gender;
     private Address currentAddress;
-    public final String entityType = "PER";
 
     public enum Gender {
         M("M","Male") , F("F","Female");
