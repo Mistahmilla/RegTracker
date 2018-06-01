@@ -6,6 +6,6 @@ import java.util.List;
 
 public interface AddressDAO {
 
-    public List<Address> get(long EntityID);
+    public List<Address> get(long entityID);
 
 }
