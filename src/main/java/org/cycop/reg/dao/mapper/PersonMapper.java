@@ -1,6 +1,8 @@
 package org.cycop.reg.dao.mapper;
 
+import org.cycop.reg.dao.AddressDAO;
 import org.cycop.reg.dataobjects.Person;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Component;
 
@@ -9,6 +11,9 @@ import java.sql.SQLException;
 
 @Component
 public class PersonMapper implements RowMapper<Person>{
+
+    @Autowired
+    private AddressDAO addressDAO;
 
     @Override
     public Person mapRow(ResultSet resultSet, int i) throws SQLException {
@@ -28,6 +33,7 @@ public class PersonMapper implements RowMapper<Person>{
         if(resultSet.getTimestamp("UPD_T") != null){
             p.setUpdateTime(resultSet.getTimestamp("UPD_T").toLocalDateTime());
         }
+        p.setCurrentAddress(addressDAO.get(p.getPersonID()).get(0));
         return p;
     }
 }

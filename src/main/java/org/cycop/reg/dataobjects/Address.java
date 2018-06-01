@@ -2,6 +2,7 @@ package org.cycop.reg.dataobjects;
 
 public class Address extends DataObject{
 
+    private long addressID;
     private String streetAddress;
     private String city;
     private String state;
@@ -9,6 +10,14 @@ public class Address extends DataObject{
 
     public Address(){
         super();
+    }
+
+    public void setAddressID(long addressID){
+        this.addressID = addressID;
+    }
+
+    public long getAddressID(){
+        return addressID;
     }
 
     public void setStreetAddress(String streetAddress){

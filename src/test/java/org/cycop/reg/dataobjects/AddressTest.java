@@ -9,6 +9,7 @@ public class AddressTest {
     @Test
     public void testAddress(){
         Address a = new Address();
+        a.setAddressID(1);
         a.setStreetAddress("123 Fake Street");
         a.setCity("Springfield");
         a.setState("MA");
@@ -17,5 +18,6 @@ public class AddressTest {
         assertEquals("Springfield", a.getCity());
         assertEquals("MA", a.getState());
         assertEquals("12345", a.getZipCode());
+        assertEquals(1, a.getAddressID());
     }
 }

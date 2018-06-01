@@ -18,6 +18,8 @@ public class Person extends DataObject {
     private LocalDate birthDate;
     private Long personID;
     private Gender gender;
+    private Address currentAddress;
+    public final String entityType = "PER";
 
     public enum Gender {
         M("M","Male") , F("F","Female");
@@ -89,4 +91,13 @@ public class Person extends DataObject {
     public Gender getGender(){
         return this.gender;
     }
+
+    public void setCurrentAddress(Address currentAddress){
+        this.currentAddress = currentAddress;
+    }
+
+    public Address getCurrentAddress(){
+        return currentAddress;
+    }
+
 }

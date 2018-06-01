@@ -3,6 +3,7 @@ package org.cycop.reg.config;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.cycop.reg.SecretRetriever;
 import org.cycop.reg.dao.GradeDAO;
+import org.cycop.reg.dao.PersonAddressDAO;
 import org.cycop.reg.dao.PersonDAO;
 import org.cycop.reg.dataobjects.Credential;
 import org.slf4j.Logger;
@@ -54,6 +55,11 @@ public class MvcConfiguration implements WebMvcConfigurer {
     @Bean
     public GradeDAO getGradeDAO()  {
         return new GradeDAO(getDataSource());
+    }
+
+    @Bean
+    public PersonAddressDAO getAddressDAO(){
+        return new PersonAddressDAO(getDataSource());
     }
 
 }
