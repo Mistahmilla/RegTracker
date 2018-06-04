@@ -17,10 +17,10 @@ public class PersonValidator implements Validator {
         ValidationUtils.rejectIfEmpty(errors, "firstName", "firstName.empty", "First name cannot be blank.");
         ValidationUtils.rejectIfEmpty(errors, "lastName", "lastName.empty", "Last name cannot be blank.");
         Person p = (Person) o;
-        if (p.getFirstName().length()>45){
+        if (p.getFirstName()!= null && p.getFirstName().length()>45){
             errors.rejectValue("firstName", "firstName.length", "The first name can not exceed 45 characters.");
         }
-        if(p.getLastName().length()>45){
+        if(p.getLastName()!= null && p.getLastName().length()>45){
             errors.rejectValue("lastName", "firstName.length", "The last name can not exceed 45 characters.");
         }
     }
