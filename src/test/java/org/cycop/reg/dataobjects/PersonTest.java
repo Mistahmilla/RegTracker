@@ -12,6 +12,12 @@ public class PersonTest {
     @Test
     public void testPerson(){
         Person p = new Person();
+        Address a = new Address();
+        a.setStreetAddress("123 Fake Street");
+        a.setCity("Springfield");
+        a.setState("MA");
+        a.setZipCode("12345");
+        p.setCurrentAddress(a);
         p.setPersonID((long)1);
         p.setFirstName("John");
         p.setLastName("Smith");
@@ -29,6 +35,7 @@ public class PersonTest {
         assertEquals((long)1, (long)p.getPersonID());
         assertEquals(LocalDateTime.of(2001, 9, 11, 5, 11, 15, 10), p.getCreateTime());
         assertEquals(LocalDateTime.of(2001, 9, 11, 5, 12, 15, 10), p.getUpdateTime());
+        assertEquals(a, p.getCurrentAddress());
     }
 
 }
