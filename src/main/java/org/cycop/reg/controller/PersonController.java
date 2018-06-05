@@ -1,8 +1,12 @@
 package org.cycop.reg.controller;
 
+import org.cycop.reg.dao.PersonAddressDAO;
 import org.cycop.reg.dao.PersonDAO;
+import org.cycop.reg.dataobjects.Address;
 import org.cycop.reg.dataobjects.Person;
 import org.cycop.reg.dataobjects.validators.PersonValidator;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.DataBinder;
@@ -13,9 +17,13 @@ import java.util.List;
 @RestController
 @RequestMapping("/person")
 public class PersonController {
+    private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     @Autowired
     private PersonDAO personDAO;
+
+    @Autowired
+    private PersonAddressDAO personAddressDAO;
 
     @GetMapping("/{personID}")
     public List getPerson(@PathVariable long personID) {
@@ -40,15 +48,38 @@ public class PersonController {
 
     @PutMapping
     public List addPerson(@RequestBody Person input){
+        long personID;
+        List existingAddresses;
+
         DataBinder db = new DataBinder(input);
         db.setValidator(new PersonValidator());
         db.bind(null);
         db.validate();
         BindingResult result = db.getBindingResult();
+
         if(!result.hasErrors()) {
-            return personDAO.get(personDAO.saveOrUpdate(input));
+            personID = personDAO.saveOrUpdate(input);
+            if(input.getCurrentAddress() != null){
+                existingAddresses = personAddressDAO.get(personID);
+                logger.info("existingAddresses.size()="+existingAddresses.size());
+                if((existingAddresses.size()==1 && !addressesMatch(input.getCurrentAddress(), (Address)existingAddresses.get(0))) || existingAddresses.size() == 0) {
+                    personAddressDAO.set(personID, input.getCurrentAddress());
+                }
+            }
+            return personDAO.get(personID);
         }else{
             return result.getAllErrors();
+        }
+    }
+
+    private boolean addressesMatch(Address a, Address b){
+        if (a.getStreetAddress().toUpperCase().equals(b.getStreetAddress().toUpperCase())
+                && a.getCity().toUpperCase().equals(b.getCity().toUpperCase())
+                && a.getState().toUpperCase().equals(b.getState().toUpperCase())
+                && a.getZipCode().toUpperCase().equals(b.getZipCode().toUpperCase())){
+            return true;
+        }else{
+            return false;
         }
     }
 }
