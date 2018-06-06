@@ -61,7 +61,6 @@ public class PersonController {
             personID = personDAO.saveOrUpdate(input);
             if(input.getCurrentAddress() != null){
                 existingAddresses = personAddressDAO.get(personID);
-                logger.info("existingAddresses.size()="+existingAddresses.size());
                 if((existingAddresses.size()==1 && !addressesMatch(input.getCurrentAddress(), (Address)existingAddresses.get(0))) || existingAddresses.size() == 0) {
                     personAddressDAO.set(personID, input.getCurrentAddress());
                 }
