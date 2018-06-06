@@ -73,10 +73,10 @@ public class PersonController {
     }
 
     private boolean addressesMatch(Address a, Address b){
-        if (a.getStreetAddress().toUpperCase().equals(b.getStreetAddress().toUpperCase())
-                && a.getCity().toUpperCase().equals(b.getCity().toUpperCase())
-                && a.getState().toUpperCase().equals(b.getState().toUpperCase())
-                && a.getZipCode().toUpperCase().equals(b.getZipCode().toUpperCase())){
+        if (a.getStreetAddress().equalsIgnoreCase(b.getStreetAddress())
+                && a.getCity().equalsIgnoreCase(b.getCity())
+                && a.getState().equalsIgnoreCase(b.getState())
+                && a.getZipCode().equalsIgnoreCase(b.getZipCode())){
             return true;
         }else{
             return false;
