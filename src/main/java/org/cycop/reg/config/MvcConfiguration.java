@@ -5,6 +5,7 @@ import org.cycop.reg.SecretRetriever;
 import org.cycop.reg.dao.GradeDAO;
 import org.cycop.reg.dao.PersonAddressDAO;
 import org.cycop.reg.dao.PersonDAO;
+import org.cycop.reg.dao.RankDAO;
 import org.cycop.reg.dataobjects.Credential;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -55,6 +56,11 @@ public class MvcConfiguration implements WebMvcConfigurer {
     @Bean
     public GradeDAO getGradeDAO()  {
         return new GradeDAO(getDataSource());
+    }
+
+    @Bean
+    public RankDAO getRankDAO()  {
+        return new RankDAO(getDataSource());
     }
 
     @Bean
