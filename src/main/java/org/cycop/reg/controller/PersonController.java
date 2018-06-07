@@ -5,8 +5,6 @@ import org.cycop.reg.dao.PersonDAO;
 import org.cycop.reg.dataobjects.Address;
 import org.cycop.reg.dataobjects.Person;
 import org.cycop.reg.dataobjects.validators.PersonValidator;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.DataBinder;
@@ -17,7 +15,6 @@ import java.util.List;
 @RestController
 @RequestMapping("/person")
 public class PersonController {
-    private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     @Autowired
     private PersonDAO personDAO;
@@ -61,7 +58,7 @@ public class PersonController {
             personID = personDAO.saveOrUpdate(input);
             if(input.getCurrentAddress() != null){
                 existingAddresses = personAddressDAO.get(personID);
-                if((existingAddresses.size()==1 && !addressesMatch(input.getCurrentAddress(), (Address)existingAddresses.get(0))) || existingAddresses.size() == 0) {
+                if((existingAddresses.size()==1 && !addressesMatch(input.getCurrentAddress(), (Address)existingAddresses.get(0))) || existingAddresses.isEmpty()) {
                     personAddressDAO.set(personID, input.getCurrentAddress());
                 }
             }
@@ -72,13 +69,9 @@ public class PersonController {
     }
 
     private boolean addressesMatch(Address a, Address b){
-        if (a.getStreetAddress().equalsIgnoreCase(b.getStreetAddress())
+        return a.getStreetAddress().equalsIgnoreCase(b.getStreetAddress())
                 && a.getCity().equalsIgnoreCase(b.getCity())
                 && a.getState().equalsIgnoreCase(b.getState())
-                && a.getZipCode().equalsIgnoreCase(b.getZipCode())){
-            return true;
-        }else{
-            return false;
-        }
+                && a.getZipCode().equalsIgnoreCase(b.getZipCode());
     }
 }
