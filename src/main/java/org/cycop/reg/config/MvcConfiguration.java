@@ -40,7 +40,7 @@ public class MvcConfiguration implements WebMvcConfigurer {
         }
 
         dataSource.setDriverClassName("com.mysql.jdbc.Driver");
-        dataSource.setUrl("jdbc:mysql://52.71.162.27:3306/regtracker");
+        dataSource.setUrl("jdbc:mysql://localhost:3306/regtracker");
         dataSource.setUsername(dbCredential.getUsername());
         dataSource.setPassword(dbCredential.getPassword());
         return dataSource;

@@ -26,10 +26,10 @@ public class AccountDAO implements UserDetailsService {
                 "WHERE T_ACNT_ROLE.ACTIVE_ROLE_I = 'Y'";
     }
 
-    public List<Account> getAccounByID(long AccountID) {
+    public List<Account> getAccounByID(long accountID) {
         String sql = accountSQL + " AND ACNT_SID = ?";
         Object[] params = new Object[1];
-        params[0] = AccountID;
+        params[0] = accountID;
         return (List<Account>)jdbcTemplate.query(sql, params, accountExtractor);
     }
 
@@ -46,6 +46,10 @@ public class AccountDAO implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String s) throws UsernameNotFoundException {
-        return getAccountByEmailAddress(s).get(0);
+        List<Account> u = getAccountByEmailAddress(s);
+        if (u.size()!=1){
+            throw new UsernameNotFoundException("Username was not found.");
+        }
+        return u.get(0);
     }
 }
