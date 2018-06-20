@@ -11,7 +11,6 @@ public class Role implements GrantedAuthority {
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     public Role(String authorityCode, String authorityDescription){
-        logger.info(authorityCode);
         this.authorityCode = authorityCode;
         this.authorityDescription = authorityDescription;
     }

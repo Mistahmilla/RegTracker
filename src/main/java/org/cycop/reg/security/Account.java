@@ -4,6 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -18,6 +19,10 @@ public class Account implements UserDetails {
     private boolean accountVerified;
     private boolean accountLocked;
     private List<Role> authorities;
+
+    public Account(){
+        authorities = new ArrayList();
+    }
 
     public void setAccountID(long accountID){
         this.accountID = accountID;
@@ -36,14 +41,18 @@ public class Account implements UserDetails {
         this.authorities = authorities;
     }
 
+    public void addAuthority(Role authority){
+        if(!authorities.contains(authority)) {
+            authorities.add(authority);
+        }
+    }
+
     @Override
     public String getPassword() {
-        logger.info("getting password");
         return password;
     }
 
     public void setPassword(String password){
-        logger.info("password: "+password);
         this.password = password;
     }
 
@@ -93,9 +102,6 @@ public class Account implements UserDetails {
 
     @Override
     public boolean isEnabled() {
-        logger.info("accountLocked: "+accountLocked);
-        logger.info("accountVerified: "+accountVerified);
-        logger.info("passwordExpired: "+passwordExpired);
         if (accountLocked == true || accountVerified == false || passwordExpired == true){
             return false;
         }

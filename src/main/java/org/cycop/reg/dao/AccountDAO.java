@@ -1,6 +1,6 @@
 package org.cycop.reg.dao;
 
-import org.cycop.reg.dao.mapper.AccountMapper;
+import org.cycop.reg.dao.mapper.AccountExtractor;
 import org.cycop.reg.security.Account;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -13,29 +13,35 @@ import java.util.List;
 public class AccountDAO implements UserDetailsService {
 
     private JdbcTemplate jdbcTemplate;
-    private AccountMapper accountMapper;
+    private AccountExtractor accountExtractor;
+    private String accountSQL;
 
     public AccountDAO(DataSource dataSource){
         this.jdbcTemplate = new JdbcTemplate(dataSource);
-        this.accountMapper = new AccountMapper();
+        this.accountExtractor = new AccountExtractor();
+
+        accountSQL = "SELECT T_ACNT.ACNT_SID, T_ACNT.EML_AD_X, T_ACNT.PWD_X, T_ACNT.SALT_X, T_ACNT.ACNT_LOCK_I, T_ACNT.ACNT_VERIFIED_I, " +
+                "T_ACNT.PWD_EXP_I, T_ACNT.CRE_T, T_ACNT.UPD_T, T_ACNT_ROLE.ROLE_C, T_ROLE.ROLE_DS " +
+                "FROM T_ACNT LEFT JOIN T_ACNT_ROLE ON T_ACNT.ACNT_SID = T_ACNT_ROLE.ACNT_SID LEFT JOIN T_ROLE ON T_ACNT_ROLE.ROLE_C = T_ROLE.ROLE_C " +
+                "WHERE T_ACNT_ROLE.ACTIVE_ROLE_I = 'Y'";
     }
 
     public List<Account> getAccounByID(long AccountID) {
-        String sql = "SELECT * FROM T_ACNT WHERE ACNT_SID = ?";
+        String sql = accountSQL + " AND ACNT_SID = ?";
         Object[] params = new Object[1];
         params[0] = AccountID;
-        return jdbcTemplate.query(sql, params, accountMapper);
+        return (List<Account>)jdbcTemplate.query(sql, params, accountExtractor);
     }
 
     public List<Account> getAccountByEmailAddress(String emailAddress){
-        String sql = "SELECT * FROM T_ACNT WHERE EML_AD_X = ?";
+        String sql = accountSQL + " AND EML_AD_X = ?";
         Object[] params = new Object[1];
         params[0] = emailAddress;
-        return jdbcTemplate.query(sql, params, accountMapper);
+        return (List<Account>)jdbcTemplate.query(sql, params, accountExtractor);
     }
 
     public List<Account> list(){
-        return jdbcTemplate.query("SELECT * FROM T_ACNT", accountMapper);
+        return (List<Account>)jdbcTemplate.query(accountSQL, accountExtractor);
     }
 
     @Override
