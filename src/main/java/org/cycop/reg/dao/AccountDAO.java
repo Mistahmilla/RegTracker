@@ -45,7 +45,7 @@ public class AccountDAO implements UserDetailsService {
     }
 
     @Override
-    public UserDetails loadUserByUsername(String s) throws UsernameNotFoundException {
+    public UserDetails loadUserByUsername(String s) {
         List<Account> u = getAccountByEmailAddress(s);
         if (u.size()!=1){
             throw new UsernameNotFoundException("Username was not found.");

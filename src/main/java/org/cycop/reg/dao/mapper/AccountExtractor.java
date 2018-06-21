@@ -2,7 +2,6 @@ package org.cycop.reg.dao.mapper;
 
 import org.cycop.reg.security.Account;
 import org.cycop.reg.security.Role;
-import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.ResultSetExtractor;
 
 import java.sql.ResultSet;
@@ -14,8 +13,8 @@ import java.util.Map;
 
 public class AccountExtractor implements ResultSetExtractor {
     @Override
-    public List<Account> extractData(ResultSet resultSet) throws SQLException, DataAccessException {
-        Map<Long, Account> map = new HashMap<Long, Account>();
+    public List<Account> extractData(ResultSet resultSet) throws SQLException {
+        Map<Long, Account> map = new HashMap<>();
         Account a = null;
         while(resultSet.next()){
             Long id = resultSet.getLong("ACNT_SID");
@@ -34,6 +33,6 @@ public class AccountExtractor implements ResultSetExtractor {
             Role role = new Role(resultSet.getString("ROLE_C"), resultSet.getString("ROLE_DS"));
             a.addAuthority(role);
         }
-        return new ArrayList<Account>(map.values());
+        return new ArrayList<>(map.values());
     }
 }

@@ -1,7 +1,5 @@
 package org.cycop.reg.security;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.ArrayList;
@@ -10,7 +8,6 @@ import java.util.List;
 
 public class Account implements UserDetails {
 
-    private final Logger logger = LoggerFactory.getLogger(this.getClass());
     private long accountID;
     private String emailAddress;
     private String password;
