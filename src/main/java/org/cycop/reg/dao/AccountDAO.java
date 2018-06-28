@@ -21,20 +21,22 @@ public class AccountDAO implements UserDetailsService {
         this.accountExtractor = new AccountExtractor();
 
         accountSQL = "SELECT T_ACNT.ACNT_SID, T_ACNT.EML_AD_X, T_ACNT.PWD_X, T_ACNT.SALT_X, T_ACNT.ACNT_LOCK_I, T_ACNT.ACNT_VERIFIED_I, " +
-                "T_ACNT.PWD_EXP_I, T_ACNT.CRE_T, T_ACNT.UPD_T, T_ACNT_ROLE.ROLE_C, T_ROLE.ROLE_DS " +
+                "T_ACNT.PWD_EXP_I, T_ACNT.CRE_T, T_ACNT.UPD_T, T_PERM.PERM_C, T_PERM.PERM_NM, T_PERM.PERM_DS " +
                 "FROM T_ACNT LEFT JOIN T_ACNT_ROLE ON T_ACNT.ACNT_SID = T_ACNT_ROLE.ACNT_SID LEFT JOIN T_ROLE ON T_ACNT_ROLE.ROLE_C = T_ROLE.ROLE_C " +
+                "LEFT JOIN T_ROLE_PERM ON T_ACNT_ROLE.ROLE_C = T_ROLE_PERM.ROLE_C " +
+                "LEFT JOIN T_PERM ON T_ROLE_PERM.PERM_C = T_PERM.PERM_C " +
                 "WHERE T_ACNT_ROLE.ACTIVE_ROLE_I = 'Y'";
     }
 
     public List<Account> getAccounByID(long accountID) {
-        String sql = accountSQL + " AND ACNT_SID = ?";
+        String sql = accountSQL + " AND T_ACNT.ACNT_SID = ?";
         Object[] params = new Object[1];
         params[0] = accountID;
         return (List<Account>)jdbcTemplate.query(sql, params, accountExtractor);
     }
 
     public List<Account> getAccountByEmailAddress(String emailAddress){
-        String sql = accountSQL + " AND EML_AD_X = ?";
+        String sql = accountSQL + " AND T_ACNT.EML_AD_X = ?";
         Object[] params = new Object[1];
         params[0] = emailAddress;
         return (List<Account>)jdbcTemplate.query(sql, params, accountExtractor);

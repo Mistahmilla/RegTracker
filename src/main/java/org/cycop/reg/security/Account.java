@@ -15,7 +15,7 @@ public class Account implements UserDetails {
     private boolean passwordExpired;
     private boolean accountVerified;
     private boolean accountLocked;
-    private List<Role> authorities;
+    private List<Authority> authorities;
 
     public Account(){
         authorities = new ArrayList();
@@ -30,15 +30,15 @@ public class Account implements UserDetails {
     }
 
     @Override
-    public Collection<Role> getAuthorities() {
+    public Collection<Authority> getAuthorities() {
         return authorities;
     }
 
-    public void setAuthorities(List<Role> authorities){
+    public void setAuthorities(List<Authority> authorities){
         this.authorities = authorities;
     }
 
-    public void addAuthority(Role authority){
+    public void addAuthority(Authority authority){
         if(!authorities.contains(authority)) {
             authorities.add(authority);
         }

@@ -1,7 +1,7 @@
 package org.cycop.reg.dao.mapper;
 
 import org.cycop.reg.security.Account;
-import org.cycop.reg.security.Role;
+import org.cycop.reg.security.Authority;
 import org.springframework.jdbc.core.ResultSetExtractor;
 
 import java.sql.ResultSet;
@@ -30,8 +30,8 @@ public class AccountExtractor implements ResultSetExtractor {
                 a.setPasswordExpired(!resultSet.getString("PWD_EXP_I").equals("N"));
                 map.put(id, a);
             }
-            Role role = new Role(resultSet.getString("ROLE_C"), resultSet.getString("ROLE_DS"));
-            a.addAuthority(role);
+            Authority authority = new Authority(resultSet.getString("PERM_C"), resultSet.getString("PERM_NM"), resultSet.getString("PERM_DS"));
+            a.addAuthority(authority);
         }
         return new ArrayList<>(map.values());
     }
