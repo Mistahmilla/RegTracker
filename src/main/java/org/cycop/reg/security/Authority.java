@@ -26,11 +26,17 @@ public class Authority implements GrantedAuthority {
         return authorityDescription;
     }
 
+    @Override
     public boolean equals(Object a){
         if (a != null && a instanceof Authority) {
             Authority auth = (Authority) a;
             return auth.getAuthority().equals(this.authorityCode);
         }
         return false;
+    }
+
+    @Override
+    public int hashCode() {
+        return authorityCode.hashCode();
     }
 }
