@@ -25,4 +25,12 @@ public class Authority implements GrantedAuthority {
     public String getAuthorityDescription(){
         return authorityDescription;
     }
+
+    public boolean equals(Object a){
+        if (a != null && a instanceof Authority) {
+            Authority auth = (Authority) a;
+            return auth.getAuthority().equals(this.authorityCode);
+        }
+        return false;
+    }
 }
