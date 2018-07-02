@@ -42,13 +42,12 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     public void configure(WebSecurity web) throws Exception {
-        web.ignoring().antMatchers("/login");
+        web.ignoring().antMatchers("/register");
     }
 
     @Override
     public void configure(HttpSecurity http) throws Exception {
-        http.antMatcher("/**")
-                .authorizeRequests().anyRequest().authenticated();
+        http.antMatcher("/**").authorizeRequests().anyRequest().authenticated().and().authorizeRequests().antMatchers("/register*").permitAll();
     }
 
     @Override

@@ -75,4 +75,9 @@ public class MvcConfiguration implements WebMvcConfigurer {
     public RoleDAO getRoleDAO(){
         return new RoleDAO(getDataSource());
     }
+
+    @Bean
+    public UserDAO getUserDAO(){
+        return new UserDAO(getDataSource());
+    }
 }
