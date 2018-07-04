@@ -39,10 +39,6 @@ public class UserExtractor implements ResultSetExtractor {
                 a.setAccountID(resultSet.getLong("ACNT_SID"));
                 a.setEmailAddress(resultSet.getString("EML_AD_X"));
                 if (resultSet.getLong("PER_SID") != 0){
-                    //p = new Person();
-                    //p.setPersonID(resultSet.getLong("PER_SID"));
-                    //p.setFirstName(resultSet.getString("PER_FIRST_NM"));
-                    //p.setLastName(resultSet.getString("PER_LAST_NM"));
                     a.setPerson(personDAO.get(resultSet.getLong("PER_SID")).get(0));
                 }
                 map.put(id, a);
