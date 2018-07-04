@@ -73,7 +73,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
                 final CharSequence clearTextPass = (CharSequence) auth.getCredentials(); // 1
                 final String newPasswordHash = encoder.encode(clearTextPass); // 2
-
+                //TODO: save the new password hash
                 logger.info("New password hash {} for user {}", newPasswordHash, auth.getName());
 
                 ((UsernamePasswordAuthenticationToken) auth).eraseCredentials(); // 3

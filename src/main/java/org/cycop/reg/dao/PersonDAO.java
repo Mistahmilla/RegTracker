@@ -3,23 +3,31 @@ package org.cycop.reg.dao;
 import com.mysql.jdbc.Statement;
 import org.cycop.reg.dao.mapper.PersonMapper;
 import org.cycop.reg.dataobjects.Person;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.PreparedStatementCreator;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
+import org.springframework.stereotype.Component;
 
 import javax.sql.DataSource;
 import java.sql.*;
 import java.util.List;
 
+@Component
 public class PersonDAO {
 
+    private final Logger logger = LoggerFactory.getLogger(this.getClass());
+
     private JdbcTemplate jdbcTemplate;
+
     @Autowired
     private PersonMapper personMapper;
 
-    public PersonDAO(DataSource dataSource) {
+    @Autowired
+    public void init(DataSource dataSource){
         jdbcTemplate = new JdbcTemplate(dataSource);
     }
 
@@ -67,6 +75,7 @@ public class PersonDAO {
     }
 
     public List<Person> get(Long personId) {
+        logger.info("Getting person: " + personId);
         String sql = "SELECT * FROM T_PER WHERE PER_SID = ?";
         Object[] params = new Object[1];
         params[0] = personId;

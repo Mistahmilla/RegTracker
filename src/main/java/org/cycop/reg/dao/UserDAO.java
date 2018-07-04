@@ -5,10 +5,12 @@ import org.cycop.reg.dao.mapper.UserExtractor;
 import org.cycop.reg.dataobjects.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.PreparedStatementCreator;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
+import org.springframework.stereotype.Component;
 
 import javax.sql.DataSource;
 import java.sql.Connection;
@@ -16,20 +18,26 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.List;
 
+@Component
 public class UserDAO {
 
     private JdbcTemplate jdbcTemplate;
+    @Autowired
     private UserExtractor userExtractor;
     private String userSQL;
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
-    public UserDAO(DataSource dataSource){
+    @Autowired
+    public void init(DataSource dataSource){
         this.jdbcTemplate = new JdbcTemplate(dataSource);
-        this.userExtractor = new UserExtractor();
 
         userSQL = "SELECT T_ACNT.ACNT_SID, T_ACNT.EML_AD_X, " +
-                "T_ACNT.CRE_T, T_ACNT.UPD_T, T_ROLE.ROLE_C, T_ROLE.ROLE_DS " +
-                "FROM T_ACNT LEFT JOIN T_ACNT_ROLE ON T_ACNT.ACNT_SID = T_ACNT_ROLE.ACNT_SID LEFT JOIN T_ROLE ON T_ACNT_ROLE.ROLE_C = T_ROLE.ROLE_C " +
+                "T_ACNT.CRE_T, T_ACNT.UPD_T, T_ROLE.ROLE_C, T_ROLE.ROLE_DS, T_ACNT.PER_SID, " +
+                "T_PER.PER_SID, T_PER.PER_FIRST_NM, T_PER.PER_LAST_NM, T_PER.BIRTH_D, T_PER.SEX_C " +
+                "FROM T_ACNT " +
+                "LEFT JOIN T_ACNT_ROLE ON T_ACNT.ACNT_SID = T_ACNT_ROLE.ACNT_SID " +
+                "LEFT JOIN T_ROLE ON T_ACNT_ROLE.ROLE_C = T_ROLE.ROLE_C " +
+                "LEFT JOIN T_PER ON T_ACNT.PER_SID = T_PER.PER_SID " +
                 "WHERE T_ACNT_ROLE.ACTIVE_ROLE_I = 'Y'";
     }
 
@@ -60,7 +68,9 @@ public class UserDAO {
                 public PreparedStatement createPreparedStatement(Connection connection) throws SQLException {
                     PreparedStatement p = connection.prepareStatement(insertSQL, Statement.RETURN_GENERATED_KEYS);
                     p.setString(1, user.getEmailAddress());
+                    //TODO: encrypt password before saving
                     p.setString(2, "{noop}"+user.getPassword());
+                    //TODO: add actual salt
                     p.setString(3, "test");
                     return p;
                 }
@@ -75,7 +85,7 @@ public class UserDAO {
 
             return keyHolder.getKey().longValue();
         }
-        //create new user
+        //TODO: add code to update users
         return 0;
     }
 }

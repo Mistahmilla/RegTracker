@@ -9,6 +9,7 @@ public class User extends DataObject {
     private String emailAddress;
     private String password;
     private List<Role> roles;
+    private Person person;
 
     public User(){
         roles = new ArrayList();
@@ -50,5 +51,13 @@ public class User extends DataObject {
 
     public List<Role> getRoles(){
         return roles;
+    }
+
+    public void setPerson(Person person){
+        this.person = person;
+    }
+
+    public Person getPerson(){
+        return person;
     }
 }

@@ -3,10 +3,12 @@ package org.cycop.reg.dao;
 import com.mysql.jdbc.Statement;
 import org.cycop.reg.dao.mapper.AddressMapper;
 import org.cycop.reg.dataobjects.Address;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.PreparedStatementCreator;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
+import org.springframework.stereotype.Component;
 
 import javax.sql.DataSource;
 import java.sql.Connection;
@@ -14,12 +16,14 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.List;
 
+@Component
 public class PersonAddressDAO implements AddressDAO {
 
     private JdbcTemplate jdbcTemplate;
     private AddressMapper addressMapper;
 
-    public PersonAddressDAO(DataSource dataSource) {
+    @Autowired
+    public void init(DataSource dataSource){
         jdbcTemplate = new JdbcTemplate(dataSource);
         addressMapper = new AddressMapper();
     }
