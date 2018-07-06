@@ -1,6 +1,8 @@
 package org.cycop.reg.dataobjects;
 
-public class Role {
+import java.io.Serializable;
+
+public class Role implements Serializable {
 
     public String roleCode;
     public String roleDescription;
@@ -31,7 +33,7 @@ public class Role {
 
     @Override
     public boolean equals(Object r){
-        if (r != null && r instanceof Role) {
+        if (r instanceof Role) {
             Role role = (Role)r;
             return role.getRoleCode().equals(this.roleCode);
         }

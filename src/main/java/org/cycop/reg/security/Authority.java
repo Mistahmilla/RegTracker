@@ -4,7 +4,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.core.GrantedAuthority;
 
-public class Authority implements GrantedAuthority {
+import java.io.Serializable;
+
+public class Authority implements GrantedAuthority, Serializable {
 
     private String authorityCode;
     private String authorityName;
@@ -28,7 +30,7 @@ public class Authority implements GrantedAuthority {
 
     @Override
     public boolean equals(Object a){
-        if (a != null && a instanceof Authority) {
+        if (a instanceof Authority) {
             Authority auth = (Authority) a;
             return auth.getAuthority().equals(this.authorityCode);
         }
