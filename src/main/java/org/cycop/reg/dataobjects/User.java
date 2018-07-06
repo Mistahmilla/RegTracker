@@ -8,8 +8,12 @@ public class User extends DataObject {
     private long accountID;
     private String emailAddress;
     private String password;
+    private String salt;
     private List<Role> roles;
     private Person person;
+    private boolean accountLocked;
+    private boolean accountVerified;
+    private boolean passwordExpired;
 
     public User(){
         roles = new ArrayList();
@@ -39,6 +43,14 @@ public class User extends DataObject {
         this.password = password;
     }
 
+    public String getSalt(){
+        return salt;
+    }
+
+    public void setSalt(String salt){
+        this.salt = salt;
+    }
+
     public void addRole(Role role){
         if (!roles.contains(role)){
             roles.add(role);
@@ -59,5 +71,29 @@ public class User extends DataObject {
 
     public Person getPerson(){
         return person;
+    }
+
+    public boolean getAccountLocked(){
+        return accountLocked;
+    }
+
+    public void setAccountLocked(boolean accountLocked){
+        this.accountLocked = accountLocked;
+    }
+
+    public boolean getAccountVerified(){
+        return accountVerified;
+    }
+
+    public void setAccountVerified(boolean accountVerified){
+        this.accountVerified = accountVerified;
+    }
+
+    public boolean getPasswordExpired(){
+        return passwordExpired;
+    }
+
+    public void setPasswordExpired(boolean passwordExpired){
+        this.passwordExpired = passwordExpired;
     }
 }

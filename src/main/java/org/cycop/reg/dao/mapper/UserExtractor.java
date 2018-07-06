@@ -41,6 +41,21 @@ public class UserExtractor implements ResultSetExtractor {
                 if (resultSet.getLong("PER_SID") != 0){
                     a.setPerson(personDAO.get(resultSet.getLong("PER_SID")).get(0));
                 }
+                if(resultSet.getString("ACNT_LOCK_I") == "Y"){
+                    a.setAccountLocked(true);
+                }else{
+                    a.setAccountLocked(false);
+                }
+                if(resultSet.getString("ACNT_VERIFIED_I") == "Y"){
+                    a.setAccountVerified(true);
+                }else{
+                    a.setAccountVerified(false);
+                }
+                if(resultSet.getString("PWD_EXP_I") == "Y"){
+                    a.setPasswordExpired(true);
+                }else{
+                    a.setPasswordExpired(false);
+                }
                 map.put(id, a);
             }
             Role role = new Role(resultSet.getString("ROLE_C"), resultSet.getString("ROLE_DS"));

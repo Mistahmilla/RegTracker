@@ -1,11 +1,12 @@
 package org.cycop.reg.controller;
 
 import org.cycop.reg.dao.UserDAO;
+import org.cycop.reg.dataobjects.User;
+import org.cycop.reg.dataobjects.validators.UserValidator;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.DataBinder;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -17,7 +18,34 @@ public class UserController {
     UserDAO userDAO;
 
     @GetMapping("/{userID}")
-    public List getPerson(@PathVariable long userID) {
+    public List getUser(@PathVariable long userID) {
         return userDAO.getUserByAccountID(userID);
+    }
+
+    @PutMapping
+    public List updateUser(@RequestBody User input){
+        //TODO; if it's a user only allow them to update their own user
+        User existingUser = (User)getUser(input.getAccountID()).get(0);
+        if (existingUser == null){
+            throw new NullPointerException("User does not exist.");
+        }
+
+        //validate user
+        DataBinder db = new DataBinder(input);
+        db.setValidator(new UserValidator());
+        db.bind(null);
+        db.validate();
+        BindingResult result = db.getBindingResult();
+
+        //TODO: if roles are changing add logic to ensure they have permission to update roles
+        //TODO: if active/etc flags are changing ensure the logged in user has permission to change them
+        if(!result.hasErrors()) {
+            //update user
+            return userDAO.getUserByAccountID(userDAO.updateExisting(input, userDAO.getUserByAccountID(input.getAccountID()).get(0)));
+
+        }else{
+            return result.getAllErrors();
+        }
+
     }
 }
