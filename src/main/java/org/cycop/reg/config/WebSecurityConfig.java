@@ -1,6 +1,9 @@
 package org.cycop.reg.config;
 
 import org.cycop.reg.dao.AccountDAO;
+import org.cycop.reg.dao.UserDAO;
+import org.cycop.reg.dataobjects.User;
+import org.cycop.reg.security.Account;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,6 +36,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
     private AccountDAO accountDAO;
+
+    @Autowired
+    private UserDAO userDAO;
+
     /**
      * Constructor disables the default security settings
      */
@@ -68,14 +75,20 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
         return (AuthenticationSuccessEvent event) -> {
             final Authentication auth = event.getAuthentication();
+            User u;
+            Account a;
 
             if (auth instanceof UsernamePasswordAuthenticationToken && auth.getCredentials() != null) {
+                logger.info("Upgrading password for user {}", auth.getName());
 
                 final CharSequence clearTextPass = (CharSequence) auth.getCredentials(); // 1
                 final String newPasswordHash = encoder.encode(clearTextPass); // 2
-                //TODO: save the new password hash
-                logger.info("New password hash {} for user {}", newPasswordHash, auth.getName());
 
+                u = userDAO.getUserByEmailAddress(auth.getName()).get(0);
+                a = accountDAO.getAccountByEmailAddress(auth.getName()).get(0);
+                u.setPassword(newPasswordHash);
+                u.setSalt(a.getPasswordSalt());
+                userDAO.updateExisting(u, u);
                 ((UsernamePasswordAuthenticationToken) auth).eraseCredentials(); // 3
             }
         };
