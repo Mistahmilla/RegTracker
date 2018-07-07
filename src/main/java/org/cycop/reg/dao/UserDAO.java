@@ -2,6 +2,7 @@ package org.cycop.reg.dao;
 
 import com.mysql.jdbc.Statement;
 import org.cycop.reg.dao.mapper.UserExtractor;
+import org.cycop.reg.dataobjects.Person;
 import org.cycop.reg.dataobjects.User;
 import org.cycop.reg.security.Account;
 import org.slf4j.Logger;
@@ -67,8 +68,10 @@ public class UserDAO {
     }
 
     public long createNew(User user){
-        String insertSQL = "INSERT INTO T_ACNT (EML_AD_X, PWD_X, SALT_X, CRE_T, UPD_T) VALUES (?, ?, ?, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);";
+        String insertSQL = "INSERT INTO T_ACNT (EML_AD_X, PWD_X, SALT_X, PER_SID, CRE_T, UPD_T) VALUES (?, ?, ?, ?, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);";
         String roleSQL = "INSERT INTO T_ACNT_ROLE (ACNT_SID, ROLE_C, ADD_D, CRE_T, UPD_T) VALUES (?, ?, NOW(), CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);";
+
+        Person per = personDAO.get(personDAO.saveOrUpdate(user.getPerson())).get(0);
 
         if (Long.valueOf(user.getAccountID()) == null || user.getAccountID() == 0) {
             logger.info("Creating new user");
@@ -78,9 +81,10 @@ public class UserDAO {
                 public PreparedStatement createPreparedStatement(Connection connection) throws SQLException {
                     PreparedStatement p = connection.prepareStatement(insertSQL, Statement.RETURN_GENERATED_KEYS);
                     p.setString(1, user.getEmailAddress());
-                    p.setString(2, passwordEncoder.encode((CharSequence)user.getPassword()));
+                    p.setString(2, passwordEncoder.encode(user.getPassword()));
                     //TODO: add actual salt
                     p.setString(3, "test");
+                    p.setLong(4, per.getPersonID());
                     return p;
                 }
             }, keyHolder);
