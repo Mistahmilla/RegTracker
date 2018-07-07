@@ -7,10 +7,12 @@ import org.cycop.reg.security.Account;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.PreparedStatementCreator;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import javax.sql.DataSource;
@@ -29,6 +31,10 @@ public class UserDAO {
     private PersonDAO personDAO;
     @Autowired
     private AccountDAO accountDAO;
+    //TODO: Try to figure out the circular reference
+    @Lazy
+    @Autowired
+    private PasswordEncoder passwordEncoder;
     private String userSQL;
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
@@ -72,8 +78,7 @@ public class UserDAO {
                 public PreparedStatement createPreparedStatement(Connection connection) throws SQLException {
                     PreparedStatement p = connection.prepareStatement(insertSQL, Statement.RETURN_GENERATED_KEYS);
                     p.setString(1, user.getEmailAddress());
-                    //TODO: encrypt password before saving
-                    p.setString(2, "{noop}"+user.getPassword());
+                    p.setString(2, passwordEncoder.encode((CharSequence)user.getPassword()));
                     //TODO: add actual salt
                     p.setString(3, "test");
                     return p;
