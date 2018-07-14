@@ -4,8 +4,8 @@ import java.io.Serializable;
 
 public class Role implements Serializable {
 
-    public String roleCode;
-    public String roleDescription;
+    private String roleCode;
+    private String roleDescription;
 
     public Role(){
 
