@@ -3,6 +3,8 @@ package org.cycop.reg.dao.mapper;
 import org.cycop.reg.dao.AddressDAO;
 import org.cycop.reg.dataobjects.Address;
 import org.cycop.reg.dataobjects.Person;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Component;
@@ -17,11 +19,14 @@ public class PersonMapper implements RowMapper<Person>{
     @Autowired
     private AddressDAO addressDAO;
 
+    private final Logger logger = LoggerFactory.getLogger(this.getClass());
+
     @Override
     public Person mapRow(ResultSet resultSet, int i) throws SQLException {
         Person p = new Person();
         List<Address> a;
         p.setPersonID(resultSet.getLong("PER_SID"));
+        logger.info("Getting person: " + p.getPersonID());
         p.setFirstName(resultSet.getString("PER_FIRST_NM"));
         p.setLastName(resultSet.getString("PER_LAST_NM"));
         if(resultSet.getDate("BIRTH_D") != null) {
