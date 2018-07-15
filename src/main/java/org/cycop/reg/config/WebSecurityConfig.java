@@ -79,18 +79,22 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
             Account a;
 
             if (auth instanceof UsernamePasswordAuthenticationToken && auth.getCredentials() != null) {
-                logger.info("Upgrading password for user {}", auth.getName());
 
                 final CharSequence clearTextPass = (CharSequence) auth.getCredentials(); // 1
                 final String newPasswordHash = encoder.encode(clearTextPass); // 2
 
-                u = userDAO.getUserByEmailAddress(auth.getName()).get(0);
                 a = accountDAO.getAccountByEmailAddress(auth.getName()).get(0);
-                u.setPassword(newPasswordHash);
-                u.setSalt(a.getPasswordSalt());
-                userDAO.updateExisting(u, u);
+
+                if (!a.getPassword().startsWith("{bcrypt}")) {
+                    logger.info("Upgrading password for user {}", auth.getName());
+                    u = userDAO.getUserByEmailAddress(auth.getName()).get(0);
+                    u.setPassword(newPasswordHash);
+                    u.setSalt(a.getPasswordSalt());
+                    userDAO.updateExisting(u, u);
+                }
                 ((UsernamePasswordAuthenticationToken) auth).eraseCredentials(); // 3
             }
+
         };
     }
 
