@@ -17,4 +17,4 @@ deploy:
       application: RegTracker
       deployment_group: RegTracker
       on:
-              branch: develop
+              branch: develop 
