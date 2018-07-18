@@ -32,4 +32,16 @@ public class RegistrationDAO {
         return jdbcTemplate.query(selectSQL.concat("WHERE PROGRAM_SID = ?"), params, registrationMapper);
     }
 
+    public List<Registration> getRegistrationByPerson(long personID){
+        Object[] params = new Object[1];
+        params[0] = personID;
+        return jdbcTemplate.query(selectSQL.concat("WHERE PER_SID = ?"), params, registrationMapper);
+    }
+
+    public List<Registration> getRegistrationByAccount(long accountID){
+        Object[] params = new Object[1];
+        params[0] = accountID;
+        return jdbcTemplate.query(selectSQL.concat("WHERE PER_SID IN (SELECT PER_SID FROM T_ACNT_PER WHERE ACNT_SID = ? AND ACTIVE_PER_I = 'Y')"), params, registrationMapper);
+    }
+
 }

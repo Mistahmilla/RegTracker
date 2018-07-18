@@ -2,6 +2,7 @@ package org.cycop.reg.controller;
 
 import org.cycop.reg.dao.PersonAddressDAO;
 import org.cycop.reg.dao.PersonDAO;
+import org.cycop.reg.dao.RegistrationDAO;
 import org.cycop.reg.dataobjects.Address;
 import org.cycop.reg.dataobjects.Person;
 import org.cycop.reg.dataobjects.validators.PersonValidator;
@@ -22,9 +23,17 @@ public class PersonController {
     @Autowired
     private PersonAddressDAO personAddressDAO;
 
+    @Autowired
+    private RegistrationDAO registrationDAO;
+
     @GetMapping("/{personID}")
     public List getPerson(@PathVariable long personID) {
         return personDAO.get(personID);
+    }
+
+    @GetMapping("/{personID}/registrations")
+    public List getPersonRegistrations(@PathVariable long personID){
+        return registrationDAO.getRegistrationByPerson(personID);
     }
 
     @GetMapping
