@@ -2,6 +2,8 @@ package org.cycop.reg.dao;
 
 import org.cycop.reg.dao.mapper.RegistrationMapper;
 import org.cycop.reg.dataobjects.Registration;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
@@ -16,6 +18,7 @@ public class RegistrationDAO {
     private RegistrationMapper registrationMapper;
     private JdbcTemplate jdbcTemplate;
     private String selectSQL;
+    private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     @Autowired
     public void init(DataSource dataSource){
@@ -27,6 +30,7 @@ public class RegistrationDAO {
     }
 
     public List<Registration> getRegistrationByProgram(long programID){
+        logger.info("retrieving all registrations for program: {}", programID);
         Object[] params = new Object[1];
         params[0] = programID;
         return jdbcTemplate.query(selectSQL.concat("WHERE PROGRAM_SID = ?"), params, registrationMapper);
