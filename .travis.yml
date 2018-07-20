@@ -1,4 +1,9 @@
 language: java
+dk:
+  - oraclejdk8
+sudo: false
+install: true
+
 addons:
   sonarcloud:
     organization: "mistahmilla-github" # the key of the org you chose at step #3
@@ -7,26 +12,33 @@ addons:
 script:
   # other script steps might be done before running the actual analysis
   mvn clean org.jacoco:jacoco-maven-plugin:prepare-agent install sonar:sonar
+before_deploy:
+  - cd ..
+  - zip -r RegTracker.zip RegTracker appspec.yml || true
+  - mkdir -p "dpl_cd_upload"
+  - mv RegTracker.zip dpl_cd_upload/RegTracker.zip || true
 deploy:
   - provider: s3
-    access_key_id: $AWS_KEY_ID
+    access_key_id: $AWS_KEY_ID # declared in Travis repo settings
     secret_access_key: $AWS_ACCESS_KEY
-    local_dir: build
-    skip_cleanup: true
-    on:
-      branch: develop
-      repo: Mistahmilla/RegTracker
+    local_dir: dpl_cd_upload
     bucket: cycop
     region: us-east-1
+    skip_cleanup: true
+    acl: public_read
+    detect_encoding: true
+    on:
+      repo: Mistahmilla/RegTracker
+      all_branches: true
   - provider: codedeploy
-    access_key_id: $AWS_KEY_ID
+    access_key_id: $AWS_KEY_ID # declared in Travis repo settings
     secret_access_key: $AWS_ACCESS_KEY
     bucket: cycop
-    key: RegTracker-1.0-SNAPSHOT.jar
+    key: RegTracker.zip
     bundle_type: zip
     application: RegTracker
     deployment_group: RegTracker
     region: us-east-1
     on:
-        branch: develop
-    wait-until-deployed: true
+      repo: Mistahmilla/RegTracker
+      all_branches: true
