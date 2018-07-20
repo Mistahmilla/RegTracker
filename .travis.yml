@@ -13,7 +13,8 @@ deploy:
     secret_access_key: $AWS_ACCESS_KEY
     local_dir: build
     skip_cleanup: true
-    on: &1
+    on:
+      branch: develop
       repo: Mistahmilla/RegTracker
     bucket: cycop
     region: us-east-1
@@ -26,5 +27,6 @@ deploy:
     application: RegTracker
     deployment_group: RegTracker
     region: us-east-1
-    on: *1
+    on:
+        branch: develop
     wait-until-deployed: true
