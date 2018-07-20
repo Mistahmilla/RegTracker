@@ -12,6 +12,7 @@
 
     <groupId>RegTracker</groupId>
     <artifactId>RegTracker</artifactId>
+    <packaging>jar</packaging>
     <version>1.0-SNAPSHOT</version>
 
     <parent>
