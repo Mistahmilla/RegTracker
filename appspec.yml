@@ -5,6 +5,6 @@ files:
     destination: /home/ec2-user
 hooks:
   ApplicationStart:
-      - location: /home/ec2-user/src/main/resources/scripts/install.sh
+      - location: /home/ec2-user/install.sh
         timeout: 3600
         runas: root
