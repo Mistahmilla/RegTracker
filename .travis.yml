@@ -13,8 +13,7 @@ script:
   # other script steps might be done before running the actual analysis
   mvn clean org.jacoco:jacoco-maven-plugin:prepare-agent install sonar:sonar
 before_deploy:
-  - cd ..
-  - zip -r -j RegTracker.zip /home/travis/build/Mistahmilla/RegTracker/target/RegTracker-1.0-SNAPSHOT.jar /home/travis/build/Mistahmilla/RegTracker/appspec.yml /home/travis/build/Mistahmilla/RegTracker/src/main/resources/scripts/install.sh || true
+  - zip -r -j RegTracker.zip RegTracker appspec.yml || true
   - mkdir -p "dpl_cd_upload"
   - mv RegTracker.zip dpl_cd_upload/RegTracker.zip || true
 deploy:
