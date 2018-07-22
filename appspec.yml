@@ -4,10 +4,15 @@ files:
   - source: /
     destination: /home/ec2-user
 hooks:
-BeforeInstall:
-    - location: /home/ec2-user/src/main/resources/scripts/before-install.sh
+  ApplicationStop:
+    - location: /home/ec2-user/src/main/resources/scripts/stop_application.sh
+      timeout: 300
       runas: root
-ApplicationStart:
+  BeforeInstall:
+    - location: /home/ec2-user/src/main/resources/scripts/before-install.sh
+      timeout: 300
+      runas: root
+  ApplicationStart:
     - location: /home/ec2-user/src/main/resources/scripts/install.sh
-      timeout: 3600
+      timeout: 300
       runas: root
