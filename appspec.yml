@@ -4,7 +4,10 @@ files:
   - source: /
     destination: /home/ec2-user
 hooks:
-  ApplicationStart:
-      - location: install.sh
-        timeout: 3600
-        runas: root
+BeforeInstall:
+    - location: RegTracker/src/main/resources/scripts/before-install.sh
+      runas: root
+ApplicationStart:
+    - location: RegTracker/src/main/resources/scripts/
+      timeout: 3600
+      runas: root
