@@ -5,14 +5,14 @@ files:
     destination: /home/ec2-user
 hooks:
   ApplicationStop:
-    - location: src/main/resources/scripts/stop_application.sh
+    - location: RegTracker/src/main/resources/scripts/stop_application.sh
       timeout: 300
       runas: root
   BeforeInstall:
-    - location: src/main/resources/scripts/before-install.sh
+    - location: RegTracker/src/main/resources/scripts/before-install.sh
       timeout: 300
       runas: root
   ApplicationStart:
-    - location: src/main/resources/scripts/install.sh
+    - location: RegTracker/src/main/resources/scripts/install.sh
       timeout: 300
       runas: root
