@@ -39,6 +39,7 @@ public class PersonDAO {
         }
 
         if(person.getPersonID() != null){
+            logger.info("Updating person: {}", person.getPersonID());
             String sql = "UPDATE T_PER SET PER_FIRST_NM = ?, PER_LAST_NM = ?, SEX_C = ?, BIRTH_D = ?, UPD_T = CURRENT_TIMESTAMP WHERE PER_SID = ?;";
             jdbcTemplate.update(sql, person.getFirstName(), person.getLastName(), genderCode, Date.valueOf(person.getBirthDate()), person.getPersonID());
             return person.getPersonID();
@@ -64,18 +65,19 @@ public class PersonDAO {
                     return p;
                 }
             }, keyHolder);
-
+            logger.info("Created person: {}", keyHolder.getKey().longValue());
             return keyHolder.getKey().longValue();
         }
     }
 
     public void delete(Long personId) {
+        logger.info("Deleting person: {}", personId);
         String sql = "DELETE FROM T_PER WHERE PER_SID = ?";
         jdbcTemplate.update(sql, personId);
     }
 
     public List<Person> get(Long personId) {
-        logger.info("Getting person: " + personId);
+        logger.info("Getting person: {}", personId);
         String sql = "SELECT * FROM T_PER WHERE PER_SID = ?";
         Object[] params = new Object[1];
         params[0] = personId;
@@ -83,6 +85,7 @@ public class PersonDAO {
     }
 
     public List<Person> get(String personName){
+        logger.info("Getting person by name");
         String nameParameter = personName;
         Object[] params = new Object[1];
         if (nameParameter != null){
@@ -94,6 +97,7 @@ public class PersonDAO {
     }
 
     public List<Person> get(){
+        logger.info("Getting all people");
         String sql = "SELECT * FROM T_PER";
         return jdbcTemplate.query(sql, personMapper);
     }

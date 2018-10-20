@@ -2,21 +2,25 @@ package org.cycop.reg.dao;
 
 import org.cycop.reg.dao.mapper.AccountExtractor;
 import org.cycop.reg.security.Account;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.stereotype.Component;
 
 import javax.sql.DataSource;
 import java.util.List;
 
+@Component
 public class AccountDAO implements UserDetailsService {
 
     private JdbcTemplate jdbcTemplate;
     private AccountExtractor accountExtractor;
     private String accountSQL;
 
-    public AccountDAO(DataSource dataSource){
+    @Autowired
+    public void init(DataSource dataSource){
         this.jdbcTemplate = new JdbcTemplate(dataSource);
         this.accountExtractor = new AccountExtractor();
 

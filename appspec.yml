@@ -1,0 +1,18 @@
+version: 0.0
+os: linux
+files:
+  - source: /
+    destination: /home/ec2-user
+hooks:
+  ApplicationStop:
+    - location: RegTracker/src/main/resources/scripts/stop_application.sh
+      timeout: 300
+      runas: root
+  BeforeInstall:
+    - location: RegTracker/src/main/resources/scripts/before-install.sh
+      timeout: 300
+      runas: root
+  ApplicationStart:
+    - location: RegTracker/src/main/resources/scripts/install.sh
+      timeout: 300
+      runas: root

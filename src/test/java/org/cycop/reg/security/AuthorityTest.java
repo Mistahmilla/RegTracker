@@ -17,5 +17,8 @@ public class AuthorityTest {
         assertEquals(a1.hashCode(), a2.hashCode());
         assertNotEquals(a1, a3);
         assertNotEquals(a1.hashCode(), a3.hashCode());
+        assertEquals(a1.getAuthorityDescription(), "ONE");
+        String s = "test";
+        assertNotEquals(a1, s);
     }
 }

@@ -2,18 +2,22 @@ package org.cycop.reg.dao;
 
 import org.cycop.reg.dao.mapper.RankMapper;
 import org.cycop.reg.dataobjects.Rank;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.stereotype.Component;
 
 import javax.sql.DataSource;
 import java.util.List;
 
+@Component
 public class RankDAO {
 
     private JdbcTemplate jdbcTemplate;
     private RankMapper rankMapper;
 
-    public RankDAO(DataSource dataSource){
-        jdbcTemplate = new JdbcTemplate(dataSource);
+    @Autowired
+    public void init(DataSource dataSource) {
+        this.jdbcTemplate = new JdbcTemplate(dataSource);
         rankMapper = new RankMapper();
     }
 

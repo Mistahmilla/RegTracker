@@ -1,5 +1,6 @@
 package org.cycop.reg.controller;
 
+import org.cycop.reg.dao.RegistrationDAO;
 import org.cycop.reg.dao.UserDAO;
 import org.cycop.reg.dataobjects.User;
 import org.cycop.reg.dataobjects.validators.UserValidator;
@@ -17,9 +18,17 @@ public class UserController {
     @Autowired
     UserDAO userDAO;
 
+    @Autowired
+    private RegistrationDAO registrationDAO;
+
     @GetMapping("/{userID}")
     public List getUser(@PathVariable long userID) {
         return userDAO.getUserByAccountID(userID);
+    }
+
+    @GetMapping("/{userID}/registrations")
+    public List getUserRegistrations(@PathVariable long userID) {
+        return registrationDAO.getRegistrationByAccount(userID);
     }
 
     @PutMapping
