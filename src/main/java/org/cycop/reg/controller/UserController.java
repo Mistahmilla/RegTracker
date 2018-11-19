@@ -1,7 +1,9 @@
 package org.cycop.reg.controller;
 
+import org.cycop.reg.dao.PersonDAO;
 import org.cycop.reg.dao.RegistrationDAO;
 import org.cycop.reg.dao.UserDAO;
+import org.cycop.reg.dataobjects.Person;
 import org.cycop.reg.dataobjects.User;
 import org.cycop.reg.dataobjects.validators.UserValidator;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +23,9 @@ public class UserController {
     @Autowired
     private RegistrationDAO registrationDAO;
 
+    @Autowired
+    PersonDAO personDAO;
+
     @GetMapping("/{userID}")
     public List getUser(@PathVariable long userID) {
         return userDAO.getUserByAccountID(userID);
@@ -29,6 +34,27 @@ public class UserController {
     @GetMapping("/{userID}/registrations")
     public List getUserRegistrations(@PathVariable long userID) {
         return registrationDAO.getRegistrationByAccount(userID);
+    }
+
+    @GetMapping("{userID}/person")
+    public List getUserPeople(@PathVariable long userID){
+        return personDAO.getByAccountID(userID);
+    }
+
+    @PutMapping("{userID}/person")
+    public List putUserPerson(@PathVariable long userID, @RequestBody Person input){
+        //TODO; verify they are only adding a person to their own account
+        Person existingPerson;
+        List<Person> l = personDAO.get(input.getPersonID());
+        if (l.size() == 0){
+            existingPerson = personDAO.get(personDAO.saveOrUpdate(input)).get(0);
+        }else{
+            existingPerson = l.get(0);
+        }
+
+        userDAO.addPersonToAccount(userID, existingPerson.getPersonID());
+
+        return getUserPeople(userID);
     }
 
     @PutMapping
