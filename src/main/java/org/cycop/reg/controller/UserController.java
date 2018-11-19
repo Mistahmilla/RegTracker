@@ -46,7 +46,7 @@ public class UserController {
         //TODO; verify they are only adding a person to their own account
         Person existingPerson;
         List<Person> l = personDAO.get(input.getPersonID());
-        if (l.size() == 0){
+        if (l.isEmpty()){
             existingPerson = personDAO.get(personDAO.saveOrUpdate(input)).get(0);
         }else{
             existingPerson = l.get(0);
