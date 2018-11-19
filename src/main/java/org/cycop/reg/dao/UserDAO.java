@@ -145,4 +145,20 @@ public class UserDAO {
 
         return user.getAccountID();
     }
+
+    public void addPersonToAccount(long accountID, long personID){
+        String sql = "INSERT INTO T_ACNT_PER (ACNT_SID, PER_SID, ADD_D, ACTIVE_PER_I, CRE_T, UPD_T) VALUES (?, ?, CURRENT_DATE, 'Y', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)";
+        Object[] params = new Object[2];
+        params[0] = accountID;
+        params[1]= personID;
+        jdbcTemplate.update(sql, params);
+    }
+
+    public void removePersonFromAccount(long accountID, long personID){
+        String sql = "UPDATE T_ACNT_PER SET REMOVE_D = CURRENT_DATE, ACTIVE_PER_I = 'N', UPD_T = CURRENT_TIMESTAMP WHERE ACNT_SID = ? AND PER_SID = ?";
+        Object[] params = new Object[2];
+        params[0] = accountID;
+        params[1]= personID;
+        jdbcTemplate.update(sql, params);
+    }
 }

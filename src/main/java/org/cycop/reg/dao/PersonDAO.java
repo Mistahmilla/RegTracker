@@ -96,6 +96,14 @@ public class PersonDAO {
         return jdbcTemplate.query(sql, params, personMapper);
     }
 
+    public List<Person> getByAccountID(Long accountID){
+        logger.info("Getting person by account: {}", accountID);
+        Object[] params = new Object[1];
+        params[0] = accountID;
+        String sql = "SELECT * FROM T_PER WHERE PER_SID IN (SELECT PER_SID FROM T_ACNT_PER WHERE ACNT_SID = ? AND ACTIVE_PER_I = 'Y')";
+        return jdbcTemplate.query(sql, params, personMapper);
+    }
+
     public List<Person> get(){
         logger.info("Getting all people");
         String sql = "SELECT * FROM T_PER";
