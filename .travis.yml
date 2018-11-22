@@ -18,8 +18,8 @@ deploy:
     secret_access_key: $AWS_ACCESS_KEY
     local_dir: dpl_cd_upload
     skip_cleanup: true
-    on: &2
-      repo: Mistahmilla/RegTracker
+    on:
+      branch: develop
     bucket: cycop
     region: us-east-1
   - provider: codedeploy
