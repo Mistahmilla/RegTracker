@@ -7,7 +7,11 @@ public class Rank extends DataObject {
     private int sortOrder;
     private String nextRankCode;
 
+    public Rank (){
+
+    }
     public Rank(String rankCode, String rankDescription, String nextRankCode, int sortOrder){
+        this();
         this.rankCode = rankCode;
         this.rankDescription = rankDescription;
         this.nextRankCode = nextRankCode;
