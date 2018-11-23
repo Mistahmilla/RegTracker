@@ -57,6 +57,8 @@ public class UserController {
         return getUserPeople(userID);
     }
 
+    //TODO: Add delete mapping for user persons
+
     @PutMapping
     public List updateUser(@RequestBody User input){
         //TODO; if it's a user only allow them to update their own user

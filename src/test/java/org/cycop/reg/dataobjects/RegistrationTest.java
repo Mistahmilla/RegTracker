@@ -37,7 +37,7 @@ public class RegistrationTest {
         a.setState("MA");
         a.setZipCode("12345");
         r.setAddress(a);
-        
+
         r.setRegistrationDate(LocalDate.of(2018,11,19));
         r.setRegistrationCancelDate(LocalDate.of(2018, 11, 20));
 
