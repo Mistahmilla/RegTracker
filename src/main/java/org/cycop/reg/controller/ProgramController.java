@@ -44,7 +44,6 @@ public class ProgramController {
         //TODO: Validate the registration object being passed in
         //TODO: Allow users to only update their registrations
 
-        //check to see if this is a new registration
         return registrationDAO.saveOrUpdateRegistration(input);
     }
 }
