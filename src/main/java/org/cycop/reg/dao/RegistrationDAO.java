@@ -66,7 +66,7 @@ public class RegistrationDAO {
 
         List<Registration> regList = getRegistrationsByProgramAndPerson(registration.getProgram().getProgramID(), registration.getPerson().getPersonID());
 
-        if (regList.size() == 0){
+        if (regList.isEmpty()){
             bNewReg = true;
             params = new Object[7];
         }else{
