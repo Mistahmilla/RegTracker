@@ -62,8 +62,9 @@ public class UserController {
     @PutMapping
     public List updateUser(@RequestBody User input){
         //TODO; if it's a user only allow them to update their own user
-        User existingUser = (User)getUser(input.getAccountID()).get(0);
-        if (existingUser == null){
+        List<User> returnedUsers = getUser(input.getAccountID());
+
+        if (returnedUsers.isEmpty()){
             throw new NullPointerException("User does not exist.");
         }
 
