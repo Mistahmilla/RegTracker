@@ -11,8 +11,8 @@ import org.mockito.*;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.testng.Assert.fail;
-import static org.testng.AssertJUnit.assertEquals;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
 
 public class UserControllerTest {
 
