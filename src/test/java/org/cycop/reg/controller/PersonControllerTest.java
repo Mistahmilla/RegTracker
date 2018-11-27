@@ -2,6 +2,7 @@ package org.cycop.reg.controller;
 
 import org.cycop.reg.dao.PersonAddressDAO;
 import org.cycop.reg.dao.PersonDAO;
+import org.cycop.reg.dao.RegistrationDAO;
 import org.cycop.reg.dataobjects.Address;
 import org.cycop.reg.dataobjects.Person;
 import org.junit.Before;
@@ -22,6 +23,9 @@ public class PersonControllerTest {
 
     @Mock
     PersonAddressDAO personAddressDAO;
+
+    @Mock
+    RegistrationDAO registrationDAO;
 
     @InjectMocks
     PersonController personController;
@@ -74,5 +78,35 @@ public class PersonControllerTest {
         b.setState("one");
         personController.addPerson(p);
         Mockito.verify(personAddressDAO, Mockito.atLeast(4)).set(1, a);
+    }
+
+    @Test
+    public void testDeletePerson(){
+        personController.deletePerson(Long.valueOf(1));
+        Mockito.verify(personDAO).delete(Long.valueOf(1));
+    }
+
+    @Test
+    public void testGetPerson(){
+        personController.getPerson(Long.valueOf(1));
+        Mockito.verify(personDAO).get(Long.valueOf(1));
+    }
+
+    @Test
+    public void testGetPersonRegistrations(){
+        personController.getPersonRegistrations(Long.valueOf(1));
+        Mockito.verify(registrationDAO).getRegistrationByPerson(Long.valueOf(1));
+    }
+
+    @Test
+    public void testPersonSearch(){
+        personController.personSearch(0, "");
+        Mockito.verify(personDAO).get();
+
+        personController.personSearch(1, "");
+        Mockito.verify(personDAO).get(Long.valueOf(1));
+
+        personController.personSearch(0, "test");
+        Mockito.verify(personDAO).get("test");
     }
 }
