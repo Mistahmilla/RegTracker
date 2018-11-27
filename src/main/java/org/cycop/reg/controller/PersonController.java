@@ -3,8 +3,10 @@ package org.cycop.reg.controller;
 import org.cycop.reg.dao.PersonAddressDAO;
 import org.cycop.reg.dao.PersonDAO;
 import org.cycop.reg.dao.RegistrationDAO;
+import org.cycop.reg.dao.UserDAO;
 import org.cycop.reg.dataobjects.Address;
 import org.cycop.reg.dataobjects.Person;
+import org.cycop.reg.dataobjects.User;
 import org.cycop.reg.dataobjects.validators.PersonValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindingResult;
@@ -25,6 +27,12 @@ public class PersonController {
 
     @Autowired
     private RegistrationDAO registrationDAO;
+
+    @Autowired
+    private UserDAO userDAO;
+
+    @Autowired
+    private UserController userController;
 
     @GetMapping("/{personID}")
     public List getPerson(@PathVariable long personID) {
@@ -55,6 +63,9 @@ public class PersonController {
     @PutMapping
     public List addPerson(@RequestBody Person input){
         long personID;
+        List<User> userList;
+        User currentUser;
+
         List existingAddresses;
 
         DataBinder db = new DataBinder(input);
@@ -70,6 +81,13 @@ public class PersonController {
                 if((existingAddresses.size()==1 && !addressesMatch(input.getCurrentAddress(), (Address)existingAddresses.get(0))) || existingAddresses.isEmpty()) {
                     personAddressDAO.set(personID, input.getCurrentAddress());
                 }
+            }
+
+            //get the current user and add the person to the account
+            userList = userController.getCurrentUser();
+            if(!userList.isEmpty()) {
+                currentUser = userList.get(0);
+                userDAO.addPersonToAccount(currentUser.getAccountID(), personID);
             }
             return personDAO.get(personID);
         }else{

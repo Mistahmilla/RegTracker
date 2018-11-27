@@ -3,8 +3,10 @@ package org.cycop.reg.controller;
 import org.cycop.reg.dao.PersonAddressDAO;
 import org.cycop.reg.dao.PersonDAO;
 import org.cycop.reg.dao.RegistrationDAO;
+import org.cycop.reg.dao.UserDAO;
 import org.cycop.reg.dataobjects.Address;
 import org.cycop.reg.dataobjects.Person;
+import org.cycop.reg.dataobjects.User;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.InjectMocks;
@@ -26,6 +28,12 @@ public class PersonControllerTest {
 
     @Mock
     RegistrationDAO registrationDAO;
+
+    @Mock
+    UserDAO userDAO;
+
+    @Mock
+    UserController userController;
 
     @InjectMocks
     PersonController personController;
@@ -61,11 +69,18 @@ public class PersonControllerTest {
         List<Address> aList = new ArrayList();
         aList.add(b);
 
+        List<User> uList = new ArrayList();
+        User u = new User();
+        u.setAccountID(1);
+        uList.add(u);
+
         Mockito.when(personDAO.saveOrUpdate(p)).thenReturn(Long.valueOf(1));
         Mockito.when(personAddressDAO.get(1)).thenReturn(aList);
+        Mockito.when(userController.getCurrentUser()).thenReturn(uList);
         personController.addPerson(p);
 
         Mockito.verify(personAddressDAO).set(1, a);
+        Mockito.verify(userDAO).addPersonToAccount(1, 1);
 
         b.setStreetAddress("one");
         personController.addPerson(p);
@@ -78,6 +93,8 @@ public class PersonControllerTest {
         b.setState("one");
         personController.addPerson(p);
         Mockito.verify(personAddressDAO, Mockito.atLeast(4)).set(1, a);
+
+
     }
 
     @Test
