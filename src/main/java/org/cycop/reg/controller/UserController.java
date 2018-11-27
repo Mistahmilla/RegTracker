@@ -6,7 +6,9 @@ import org.cycop.reg.dao.UserDAO;
 import org.cycop.reg.dataobjects.Person;
 import org.cycop.reg.dataobjects.User;
 import org.cycop.reg.dataobjects.validators.UserValidator;
+import org.cycop.reg.security.IAuthenticationFacade;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.DataBinder;
 import org.springframework.web.bind.annotation.*;
@@ -25,6 +27,9 @@ public class UserController {
 
     @Autowired
     PersonDAO personDAO;
+
+    @Autowired
+    private IAuthenticationFacade authenticationFacade;
 
     @GetMapping("/{userID}")
     public List getUser(@PathVariable long userID) {
@@ -85,5 +90,11 @@ public class UserController {
             return result.getAllErrors();
         }
 
+    }
+
+    @GetMapping("/current")
+    public List<User> getCurrentUser(){
+        Authentication authentication = authenticationFacade.getAuthentication();
+        return userDAO.getUserByEmailAddress(authentication.getName());
     }
 }
