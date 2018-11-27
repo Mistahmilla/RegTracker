@@ -63,8 +63,6 @@ public class PersonController {
     @PutMapping
     public List addPerson(@RequestBody Person input){
         long personID;
-        List<User> userList;
-        User currentUser;
 
         List existingAddresses;
 
@@ -83,16 +81,28 @@ public class PersonController {
                 }
             }
 
-            //get the current user and add the person to the account
-            userList = userController.getCurrentUser();
-            if(!userList.isEmpty()) {
-                currentUser = userList.get(0);
-                userDAO.addPersonToAccount(currentUser.getAccountID(), personID);
-            }
             return personDAO.get(personID);
         }else{
             return result.getAllErrors();
         }
+    }
+
+    @PutMapping
+    public List addPerson(@RequestBody Person input, @RequestParam(value="addToAccount", defaultValue="Y") String addToAccount){
+        List<Person> pList = addPerson(input);
+        if(!pList.isEmpty()){
+            if(addToAccount.equals("Y")){
+                List<User> userList;
+                User currentUser;
+                //get the current user and add the person to the account
+                userList = userController.getCurrentUser();
+                if (!userList.isEmpty()) {
+                    currentUser = userList.get(0);
+                    userDAO.addPersonToAccount(currentUser.getAccountID(), pList.get(0).getPersonID());
+                }
+            }
+        }
+        return pList;
     }
 
     private boolean addressesMatch(Address a, Address b){

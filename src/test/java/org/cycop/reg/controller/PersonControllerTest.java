@@ -65,6 +65,7 @@ public class PersonControllerTest {
         p.setLastName("Doe");
         p.setBirthDate(LocalDate.now());
         p.setCurrentAddress(a);
+        p.setPersonID(Long.valueOf(1));
 
         List<Address> aList = new ArrayList();
         aList.add(b);
@@ -74,10 +75,14 @@ public class PersonControllerTest {
         u.setAccountID(1);
         uList.add(u);
 
+        List<Person> pList = new ArrayList();
+        pList.add(p);
+
         Mockito.when(personDAO.saveOrUpdate(p)).thenReturn(Long.valueOf(1));
         Mockito.when(personAddressDAO.get(1)).thenReturn(aList);
         Mockito.when(userController.getCurrentUser()).thenReturn(uList);
-        personController.addPerson(p);
+        Mockito.when(personDAO.get(Long.valueOf(1))).thenReturn(pList);
+        personController.addPerson(p, "Y");
 
         Mockito.verify(personAddressDAO).set(1, a);
         Mockito.verify(userDAO).addPersonToAccount(1, 1);
@@ -93,8 +98,6 @@ public class PersonControllerTest {
         b.setState("one");
         personController.addPerson(p);
         Mockito.verify(personAddressDAO, Mockito.atLeast(4)).set(1, a);
-
-
     }
 
     @Test
