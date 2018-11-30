@@ -88,15 +88,15 @@ public class PersonControllerTest {
         Mockito.verify(userDAO).addPersonToAccount(1, 1);
 
         b.setStreetAddress("one");
-        personController.addPerson(p);
+        personController.addPerson(p, "N");
         Mockito.verify(personAddressDAO, Mockito.atLeast(2)).set(1, a);
 
         b.setCity("one");
-        personController.addPerson(p);
+        personController.addPerson(p, "N");
         Mockito.verify(personAddressDAO, Mockito.atLeast(3)).set(1, a);
 
         b.setState("one");
-        personController.addPerson(p);
+        personController.addPerson(p, "N");
         Mockito.verify(personAddressDAO, Mockito.atLeast(4)).set(1, a);
     }
 
