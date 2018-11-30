@@ -22,6 +22,22 @@ public class UserTest {
     }
 
     @Test
+    public void testAddPermission(){
+        User u = new User();
+        Permission p1 = new Permission();
+        p1.setPermissionCode("C1");
+        Permission p2 = new Permission();
+        p2.setPermissionCode("C1");
+
+        u.addPermission(p1);
+        u.addPermission(p2);
+        assertEquals(1, u.getPermissions().size());
+
+        u.removePermission(p1);
+        assertEquals(0, u.getPermissions().size());
+    }
+
+    @Test
     public void testFields(){
         User u = new User();
         Person p = new Person();

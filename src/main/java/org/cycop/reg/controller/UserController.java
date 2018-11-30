@@ -3,12 +3,12 @@ package org.cycop.reg.controller;
 import org.cycop.reg.dao.PersonDAO;
 import org.cycop.reg.dao.RegistrationDAO;
 import org.cycop.reg.dao.UserDAO;
+import org.cycop.reg.dataobjects.Permission;
 import org.cycop.reg.dataobjects.Person;
 import org.cycop.reg.dataobjects.User;
 import org.cycop.reg.dataobjects.validators.UserValidator;
-import org.cycop.reg.security.IAuthenticationFacade;
+import org.cycop.reg.security.AuthenticationFacade;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.DataBinder;
 import org.springframework.web.bind.annotation.*;
@@ -29,7 +29,7 @@ public class UserController {
     PersonDAO personDAO;
 
     @Autowired
-    private IAuthenticationFacade authenticationFacade;
+    private AuthenticationFacade authenticationFacade;
 
     @GetMapping("/{userID}")
     public List getUser(@PathVariable long userID) {
@@ -49,6 +49,7 @@ public class UserController {
     @PutMapping("{userID}/person")
     public List putUserPerson(@PathVariable long userID, @RequestBody Person input){
         //TODO; verify they are only adding a person to their own account
+
         Person existingPerson;
         List<Person> l = personDAO.get(input.getPersonID());
         if (l.isEmpty()){
@@ -65,13 +66,23 @@ public class UserController {
     //TODO: Add delete mapping for user persons
 
     @PutMapping
-    public List updateUser(@RequestBody User input){
+    public List updateUser(@RequestBody User input) {
         //TODO; if it's a user only allow them to update their own user
         List<User> returnedUsers = getUser(input.getAccountID());
 
         if (returnedUsers.isEmpty()){
             throw new NullPointerException("User does not exist.");
         }
+
+        if(input.getAccountID() != getCurrentUser().get(0).getAccountID() && !userHasPermission("USER_UPDATE_ANY")){
+            throw new IllegalAccessError("User does not have the 'USER_UPDATE_ANY' permission.");
+        }
+
+        if(input.getAccountID() == getCurrentUser().get(0).getAccountID() && !userHasPermission("USER_UPDATE")){
+            throw new IllegalAccessError("User does not have the 'USER_UPDATE' permission.");
+        }
+
+
 
         //validate user
         DataBinder db = new DataBinder(input);
@@ -94,7 +105,13 @@ public class UserController {
 
     @GetMapping("/current")
     public List<User> getCurrentUser(){
-        Authentication authentication = authenticationFacade.getAuthentication();
-        return userDAO.getUserByEmailAddress(authentication.getName());
+        return userDAO.getUserByEmailAddress(authenticationFacade.getAuthentication().getName());
+    }
+
+    public boolean userHasPermission(String permissionCode){
+        User currentUser = getCurrentUser().get(0);
+        Permission p = new Permission();
+        p.setPermissionCode(permissionCode);
+        return currentUser.getPermissions().contains(p);
     }
 }

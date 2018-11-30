@@ -1,6 +1,8 @@
 package org.cycop.reg.dao.mapper;
 
 import org.cycop.reg.dao.PersonDAO;
+import org.cycop.reg.dao.RoleDAO;
+import org.cycop.reg.dataobjects.Permission;
 import org.cycop.reg.dataobjects.Role;
 import org.cycop.reg.dataobjects.User;
 import org.slf4j.Logger;
@@ -24,8 +26,12 @@ public class UserExtractor implements ResultSetExtractor {
     @Autowired
     PersonDAO personDAO;
 
+    @Autowired
+    RoleDAO roleDAO;
+
     @Override
     public List<User> extractData(ResultSet resultSet) throws SQLException {
+        List<Permission> pList;
         Map<Long, User> map = new HashMap<>();
         User a = null;
         while(resultSet.next()){
@@ -60,6 +66,12 @@ public class UserExtractor implements ResultSetExtractor {
             }
             Role role = new Role(resultSet.getString("ROLE_C"), resultSet.getString("ROLE_DS"));
             a.addRole(role);
+
+            //get the list of permissions for this role and add them to the user
+            pList = roleDAO.getRolePermissions(role.getRoleCode());
+            for (int i = 0; i<pList.size(); i++){
+                a.addPermission(pList.get(i));
+            }
         }
         return new ArrayList<>(map.values());
     }
