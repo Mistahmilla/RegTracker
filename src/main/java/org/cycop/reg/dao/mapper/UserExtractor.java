@@ -39,7 +39,7 @@ public class UserExtractor implements ResultSetExtractor {
             a = map.get(id);
             if(a == null){
                 a = new User();
-                logger.info("Retrieving user: " + id);
+                logger.info("Retrieving user: {}", id);
                 a.setAccountID(id);
                 a.setEmailAddress(resultSet.getString("EML_AD_X"));
                 a.setCreateTime(resultSet.getTimestamp("CRE_T").toLocalDateTime());
