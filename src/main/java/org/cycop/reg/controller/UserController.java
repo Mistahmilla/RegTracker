@@ -67,7 +67,6 @@ public class UserController {
 
     @PutMapping
     public List updateUser(@RequestBody User input) {
-        //TODO; if it's a user only allow them to update their own user
         List<User> returnedUsers = getUser(input.getAccountID());
 
         if (returnedUsers.isEmpty()){

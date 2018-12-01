@@ -18,6 +18,9 @@ public class ProgramController {
     @Autowired
     RegistrationDAO registrationDAO;
 
+    @Autowired
+    UserController userController;
+
     @GetMapping
     public List getAllPrograms(){
         return programDAO.get();
@@ -30,8 +33,22 @@ public class ProgramController {
 
     @GetMapping("/{programID}/registrations")
     public List getProgramRegistrations(@PathVariable long programID){
-        //TODO: for users only return their registrations
-        return  registrationDAO.getRegistrationByProgram(programID);
+        List<Registration> rList;
+        // check what permission the user has and return all or only their registrations depending
+        if(userController.userHasPermission("REG_VIEW_ANY")) {
+            return registrationDAO.getRegistrationByProgram(programID);
+        }else if(userController.userHasPermission("REG_VIEW")){
+            rList = registrationDAO.getRegistrationByAccount(userController.getCurrentUser().get(0).getAccountID());
+            for (int i = 0; i < rList.size(); i++){
+                if(rList.get(i).getProgram().getProgramID() != programID){
+                    rList.remove(i);
+                    i--;
+                }
+            }
+            return rList;
+        }else{
+            throw new IllegalAccessError("User does not have the 'REG_VIEW' or 'REG_VIEW_ANY' permission.");
+        }
     }
 
     @PutMapping("/{programID}/registrations")
