@@ -67,7 +67,7 @@ public class RegistrationMapperTest {
             List<Person> perList = new ArrayList();
             perList.add(per);
             Mockito.when(rs.getLong("PER_SID")).thenReturn(Long.valueOf(2));
-            Mockito.when(personDAO.get(Long.valueOf(2))).thenReturn(perList);
+            Mockito.when(personDAO.get(2, "", 0)).thenReturn(perList);
 
             Mockito.when(rs.getDate("REG_D")).thenReturn(Date.valueOf(LocalDate.now()));
 
@@ -98,7 +98,7 @@ public class RegistrationMapperTest {
             List<Person> perList = new ArrayList();
             perList.add(per);
             Mockito.when(rs.getLong("PER_SID")).thenReturn(Long.valueOf(2));
-            Mockito.when(personDAO.get(Long.valueOf(2))).thenReturn(perList);
+            Mockito.when(personDAO.get(2, "", 0)).thenReturn(perList);
 
             Mockito.when(rs.getDate("REG_D")).thenReturn(Date.valueOf(LocalDate.now()));
 

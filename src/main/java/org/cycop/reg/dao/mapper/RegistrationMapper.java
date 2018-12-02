@@ -36,7 +36,7 @@ public class RegistrationMapper implements RowMapper<Registration> {
     public Registration mapRow(ResultSet resultSet, int i) throws SQLException {
         Registration r = new Registration();
         r.setProgram(programDAO.get(resultSet.getLong("PROGRAM_SID")).get(0));
-        r.setPerson(personDAO.get(resultSet.getLong("PER_SID")).get(0));
+        r.setPerson(personDAO.get(resultSet.getLong("PER_SID"), "", Long.valueOf(0)).get(0));
         r.setRegistrationDate(resultSet.getDate("REG_D").toLocalDate());
 
         if(!rankRepository.getRank(resultSet.getString("RANK_C")).isEmpty()) {

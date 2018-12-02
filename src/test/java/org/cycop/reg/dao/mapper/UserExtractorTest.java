@@ -43,7 +43,7 @@ public class UserExtractorTest {
         p.setLastName("Doe");
         p.setPersonID((long)1);
         plist.add(p);
-        Mockito.when(personDAO.get((long)1)).thenReturn(plist);
+        Mockito.when(personDAO.get(Long.valueOf(1), "", Long.valueOf(0))).thenReturn(plist);
 
         ResultSet rs = Mockito.mock(ResultSet.class);
         List<User> list;
@@ -82,7 +82,7 @@ public class UserExtractorTest {
         p.setLastName("Doe");
         p.setPersonID((long)1);
         plist.add(p);
-        Mockito.when(personDAO.get((long)1)).thenReturn(plist);
+        Mockito.when(personDAO.get(1, "", 0)).thenReturn(plist);
 
         ResultSet rs = Mockito.mock(ResultSet.class);
         List<User> list;
@@ -121,7 +121,7 @@ public class UserExtractorTest {
         p.setLastName("Doe");
         p.setPersonID((long)1);
         plist.add(p);
-        Mockito.when(personDAO.get((long)1)).thenReturn(plist);
+        Mockito.when(personDAO.get(1, "", 0)).thenReturn(plist);
 
         ResultSet rs = Mockito.mock(ResultSet.class);
         List<User> list;

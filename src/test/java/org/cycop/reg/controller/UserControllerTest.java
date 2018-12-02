@@ -44,7 +44,7 @@ public class UserControllerTest {
         List<Person> l = new ArrayList();
         List<Person> l2 = new ArrayList();
         l2.add(p);
-        Mockito.when(personDAO.get(Long.valueOf(1))).thenReturn(l).thenReturn(l2);
+        Mockito.when(personDAO.get(1, "", 0)).thenReturn(l).thenReturn(l2);
         Mockito.when(personDAO.saveOrUpdate(p)).thenReturn(Long.valueOf(1));
         userController.putUserPerson(1, p);
 
@@ -58,7 +58,7 @@ public class UserControllerTest {
         p.setPersonID(Long.valueOf(1));
         List<Person> l = new ArrayList();
         l.add(p);
-        Mockito.when(personDAO.get(Long.valueOf(1))).thenReturn(l).thenReturn(l);
+        Mockito.when(personDAO.get(1, "", 0)).thenReturn(l).thenReturn(l);
         Mockito.when(personDAO.saveOrUpdate(p)).thenReturn(Long.valueOf(1));
         userController.putUserPerson(1, p);
 

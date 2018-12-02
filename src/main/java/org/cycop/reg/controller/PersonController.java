@@ -36,7 +36,7 @@ public class PersonController {
 
     @GetMapping("/{personID}")
     public List getPerson(@PathVariable long personID) {
-        return personDAO.get(personID);
+        return personDAO.get(personID, "", Long.valueOf(0));
     }
 
     @GetMapping("/{personID}/registrations")
@@ -45,14 +45,9 @@ public class PersonController {
     }
 
     @GetMapping
-    public List personSearch(@RequestParam(value="personID", defaultValue="0") long personID, @RequestParam(value="personName", defaultValue="") String personName) {
-        if (personID != 0) {
-            return personDAO.get(personID);
-        }
-        if (!personName.equals("")) {
-            return personDAO.get(personName);
-        }
-        return personDAO.get();
+    public List personSearch(@RequestParam(value="personID", defaultValue="0") long personID, @RequestParam(value="personName", defaultValue="") String personName, @RequestParam(value="accountID", defaultValue="0") long accountID) {
+
+        return personDAO.get(personID, personName, accountID);
     }
 
     @DeleteMapping("/{personID}")
@@ -92,7 +87,7 @@ public class PersonController {
                 }
             }
 
-            return personDAO.get(personID);
+            return personDAO.get(personID, "", Long.valueOf(0));
         }else{
             return result.getAllErrors();
         }

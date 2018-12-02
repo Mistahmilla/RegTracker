@@ -81,7 +81,7 @@ public class PersonControllerTest {
         Mockito.when(personDAO.saveOrUpdate(p)).thenReturn(Long.valueOf(1));
         Mockito.when(personAddressDAO.get(1)).thenReturn(aList);
         Mockito.when(userController.getCurrentUser()).thenReturn(uList);
-        Mockito.when(personDAO.get(Long.valueOf(1))).thenReturn(pList);
+        Mockito.when(personDAO.get(1, "",0)).thenReturn(pList);
         personController.addPerson(p, "Y");
 
         Mockito.verify(personAddressDAO).set(1, a);
@@ -108,8 +108,8 @@ public class PersonControllerTest {
 
     @Test
     public void testGetPerson(){
-        personController.getPerson(Long.valueOf(1));
-        Mockito.verify(personDAO).get(Long.valueOf(1));
+        personController.getPerson(1);
+        Mockito.verify(personDAO).get(1, "", 0);
     }
 
     @Test
@@ -120,13 +120,13 @@ public class PersonControllerTest {
 
     @Test
     public void testPersonSearch(){
-        personController.personSearch(0, "");
-        Mockito.verify(personDAO).get();
+        personController.personSearch(0, "", 0);
+        Mockito.verify(personDAO).get(Long.valueOf(0), "", Long.valueOf(0));
 
-        personController.personSearch(1, "");
-        Mockito.verify(personDAO).get(Long.valueOf(1));
+        personController.personSearch(1, "", 0);
+        Mockito.verify(personDAO).get(Long.valueOf(1), "", Long.valueOf(0));
 
-        personController.personSearch(0, "test");
-        Mockito.verify(personDAO).get("test");
+        personController.personSearch(0, "test", 0);
+        Mockito.verify(personDAO).get(Long.valueOf(0),"test",Long.valueOf(0));
     }
 }
