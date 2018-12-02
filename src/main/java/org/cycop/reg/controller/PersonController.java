@@ -36,7 +36,7 @@ public class PersonController {
 
     @GetMapping("/{personID}")
     public List getPerson(@PathVariable long personID) {
-        return personDAO.get(personID, "", Long.valueOf(0));
+        return personDAO.get(personID, "", 0);
     }
 
     @GetMapping("/{personID}/registrations")
@@ -87,7 +87,7 @@ public class PersonController {
                 }
             }
 
-            return personDAO.get(personID, "", Long.valueOf(0));
+            return personDAO.get(personID, "", 0);
         }else{
             return result.getAllErrors();
         }

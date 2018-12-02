@@ -43,7 +43,7 @@ public class UserController {
 
     @GetMapping("{userID}/person")
     public List getUserPeople(@PathVariable long userID){
-        return personDAO.get(Long.valueOf(0), "", userID);
+        return personDAO.get(0, "", userID);
     }
 
     @PutMapping("{userID}/person")
@@ -51,9 +51,9 @@ public class UserController {
         //TODO; verify they are only adding a person to their own account
 
         Person existingPerson;
-        List<Person> l = personDAO.get(input.getPersonID(), "", Long.valueOf(0));
+        List<Person> l = personDAO.get(input.getPersonID(), "", 0);
         if (l.isEmpty()){
-            existingPerson = personDAO.get(personDAO.saveOrUpdate(input), "", Long.valueOf(0)).get(0);
+            existingPerson = personDAO.get(personDAO.saveOrUpdate(input), "", 0).get(0);
         }else{
             existingPerson = l.get(0);
         }

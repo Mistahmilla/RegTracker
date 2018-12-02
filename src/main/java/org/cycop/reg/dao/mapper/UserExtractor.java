@@ -45,7 +45,7 @@ public class UserExtractor implements ResultSetExtractor {
                 a.setCreateTime(resultSet.getTimestamp("CRE_T").toLocalDateTime());
                 a.setUpdateTime(resultSet.getTimestamp("UPD_T").toLocalDateTime());
                 if (resultSet.getLong("PER_SID") != 0){
-                    a.setPerson(personDAO.get(resultSet.getLong("PER_SID"), "", Long.valueOf(0)).get(0));
+                    a.setPerson(personDAO.get(resultSet.getLong("PER_SID"), "", 0).get(0));
                 }
                 if(resultSet.getString("ACNT_LOCK_I").equals("Y")){
                     a.setAccountLocked(true);
