@@ -46,8 +46,15 @@ public class PersonController {
 
     @GetMapping
     public List personSearch(@RequestParam(value="personID", defaultValue="0") long personID, @RequestParam(value="personName", defaultValue="") String personName, @RequestParam(value="accountID", defaultValue="0") long accountID) {
-
-        return personDAO.get(personID, personName, accountID);
+        if(userController.userHasPermission("PER_VIEW_ANY")){
+            return personDAO.get(personID, personName, accountID);
+        }else if(userController.userHasPermission("PER_VIEW")){
+            if(accountID != 0 && userController.getCurrentUser().get(0).getAccountID() != accountID){
+                throw new IllegalAccessError("User does not have the 'PER_VIEW_ANY' permission.");
+            }
+            return personDAO.get(personID, personName, userController.getCurrentUser().get(0).getAccountID());
+        }
+        throw new IllegalAccessError("User does not have the 'PER_VIEW' or 'PER_VIEW_ANY' permission.");
     }
 
     @DeleteMapping("/{personID}")

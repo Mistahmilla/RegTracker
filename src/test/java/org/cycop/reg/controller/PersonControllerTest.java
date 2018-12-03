@@ -18,6 +18,9 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
+import static junit.framework.TestCase.fail;
+import static org.junit.Assert.assertEquals;
+
 public class PersonControllerTest {
 
     @Mock
@@ -120,13 +123,43 @@ public class PersonControllerTest {
 
     @Test
     public void testPersonSearch(){
+        List uList = new ArrayList();
+        User u = new User();
+        u.setAccountID(5);
+        uList.add(u);
+
+        try{
+            personController.personSearch(0, "", 0);
+            fail("Expected an exception.");
+        }catch(IllegalAccessError e){
+            assertEquals("User does not have the 'PER_VIEW' or 'PER_VIEW_ANY' permission.", e.getMessage());
+        }
+        Mockito.doReturn(true).when(userController).userHasPermission("PER_VIEW");
+        Mockito.doReturn(uList).when(userController).getCurrentUser();
         personController.personSearch(0, "", 0);
-        Mockito.verify(personDAO).get(Long.valueOf(0), "", Long.valueOf(0));
+        Mockito.verify(personDAO).get(Long.valueOf(0), "", 5);
 
         personController.personSearch(1, "", 0);
-        Mockito.verify(personDAO).get(Long.valueOf(1), "", Long.valueOf(0));
+        Mockito.verify(personDAO).get(Long.valueOf(1), "", 5);
 
         personController.personSearch(0, "test", 0);
-        Mockito.verify(personDAO).get(Long.valueOf(0),"test",Long.valueOf(0));
+        Mockito.verify(personDAO).get(Long.valueOf(0),"test",5);
+
+        try{
+            personController.personSearch(0, "", 6);
+            fail("Expected an exception.");
+        }catch(IllegalAccessError e){
+            assertEquals("User does not have the 'PER_VIEW_ANY' permission.", e.getMessage());
+        }
+
+        Mockito.doReturn(true).when(userController).userHasPermission("PER_VIEW_ANY");
+        personController.personSearch(0, "", 0);
+        Mockito.verify(personDAO).get(Long.valueOf(0), "", 0);
+
+        personController.personSearch(1, "", 0);
+        Mockito.verify(personDAO).get(Long.valueOf(1), "", 0);
+
+        personController.personSearch(0, "test", 0);
+        Mockito.verify(personDAO).get(Long.valueOf(0),"test",0);
     }
 }
