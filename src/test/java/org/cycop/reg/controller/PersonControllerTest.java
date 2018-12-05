@@ -109,14 +109,14 @@ public class PersonControllerTest {
         uList.add(u);
         List pList = new ArrayList();
         Person p = new Person();
-        p.setPersonID(Long.valueOf(1));
+        p.setPersonID(1);
         pList.add(p);
 
         Mockito.doReturn(uList).when(userController).getCurrentUser();
         Mockito.doReturn(pList).when(personController).personSearch(1, "", 5);
 
         try {
-            personController.deletePerson(Long.valueOf(1));
+            personController.deletePerson(1);
             fail("Expected an exception.");
         }catch (IllegalAccessError e){
             assertEquals("User does not have the 'PER_DEL' or 'PER_DEL_ANY' permission.", e.getMessage());
@@ -124,11 +124,11 @@ public class PersonControllerTest {
 
 
         Mockito.doReturn(true).when(userController).userHasPermission("PER_DEL");
-        personController.deletePerson(Long.valueOf(1));
-        Mockito.verify(personDAO).delete(Long.valueOf(1));
+        personController.deletePerson(1);
+        Mockito.verify(personDAO).delete(1);
 
         Mockito.doReturn(true).when(userController).userHasPermission("PER_DEL_ANY");
-        personController.deletePerson(Long.valueOf(1));
+        personController.deletePerson(1);
         Mockito.verify(personDAO, Mockito.times(2)).delete(Long.valueOf(1));
 
         List pList2 = new ArrayList();
@@ -136,7 +136,7 @@ public class PersonControllerTest {
         Mockito.doReturn(false).when(userController).userHasPermission("PER_DEL_ANY");
 
         try {
-            personController.deletePerson(Long.valueOf(2));
+            personController.deletePerson(2);
             fail("Expected an exception.");
         }catch (IllegalAccessError e){
             assertEquals("User does not have the 'PER_DEL_ANY' permission or the user does not exist.", e.getMessage());

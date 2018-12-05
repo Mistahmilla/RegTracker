@@ -39,7 +39,7 @@ public class PersonDAO {
             genderCode = person.getGender().getGenderCode();
         }
 
-        if(person.getPersonID() != null){
+        if(person.getPersonID() != 0){
             logger.info("Updating person: {}", person.getPersonID());
             String sql = "UPDATE T_PER SET PER_FIRST_NM = ?, PER_LAST_NM = ?, SEX_C = ?, BIRTH_D = ?, UPD_T = CURRENT_TIMESTAMP WHERE PER_SID = ?;";
             jdbcTemplate.update(sql, person.getFirstName(), person.getLastName(), genderCode, Date.valueOf(person.getBirthDate()), person.getPersonID());

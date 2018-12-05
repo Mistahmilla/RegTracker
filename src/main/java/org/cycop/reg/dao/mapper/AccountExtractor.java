@@ -17,7 +17,7 @@ public class AccountExtractor implements ResultSetExtractor {
         Map<Long, Account> map = new HashMap<>();
         Account a = null;
         while(resultSet.next()){
-            Long id = resultSet.getLong("ACNT_SID");
+            long id = resultSet.getLong("ACNT_SID");
             a = map.get(id);
             if(a == null){
                 a = new Account();

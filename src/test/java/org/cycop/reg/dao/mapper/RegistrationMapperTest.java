@@ -76,7 +76,7 @@ public class RegistrationMapperTest {
 
             r = registrationMapper.mapRow(rs, 1);
             assertEquals(Long.valueOf(1), (Long)r.getProgram().getProgramID());
-            assertEquals(Long.valueOf(2), r.getPerson().getPersonID());
+            assertEquals(2, r.getPerson().getPersonID());
         }catch (Exception e){
             assert(false);
         }
@@ -133,8 +133,8 @@ public class RegistrationMapperTest {
             Mockito.when(rs.getTimestamp("PROG_UPD_T")).thenReturn(Timestamp.valueOf(LocalDateTime.now()));
 
             r = registrationMapper.mapRow(rs, 1);
-            assertEquals(Long.valueOf(1), (Long)r.getProgram().getProgramID());
-            assertEquals(Long.valueOf(2), r.getPerson().getPersonID());
+            assertEquals(1, r.getProgram().getProgramID());
+            assertEquals(2, r.getPerson().getPersonID());
             assertEquals("R", r.getRank().getRankCode());
             assertEquals("G", r.getGrade().getGradeCode());
             assertEquals("S", r.getShirtSize().getShirtSizeCode());

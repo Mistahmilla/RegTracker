@@ -35,7 +35,7 @@ public class UserExtractor implements ResultSetExtractor {
         Map<Long, User> map = new HashMap<>();
         User a = null;
         while(resultSet.next()){
-            Long id = resultSet.getLong("ACNT_SID");
+            long id = resultSet.getLong("ACNT_SID");
             a = map.get(id);
             if(a == null){
                 a = new User();
