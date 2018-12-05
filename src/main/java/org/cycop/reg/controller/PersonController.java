@@ -59,7 +59,19 @@ public class PersonController {
 
     @DeleteMapping("/{personID}")
     public void deletePerson(@PathVariable long personID){
-        personDAO.delete(personID);
+        List uList;
+        //check to see if the user has the proper permissions before deleting
+        if (userController.userHasPermission("PER_DEL_ANY")) {
+            personDAO.delete(personID);
+        } else if(userController.userHasPermission("PER_DEL")){
+            uList = personSearch(personID, "", userController.getCurrentUser().get(0).getAccountID());
+            if (uList.size() != 1){
+                throw new IllegalAccessError("User does not have the 'PER_DEL_ANY' permission or the user does not exist.");
+            }
+            personDAO.delete(personID);
+        }else{
+            throw new IllegalAccessError("User does not have the 'PER_DEL' or 'PER_DEL_ANY' permission.");
+        }
     }
 
     @PutMapping

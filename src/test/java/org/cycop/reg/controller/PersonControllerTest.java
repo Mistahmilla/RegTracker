@@ -9,10 +9,7 @@ import org.cycop.reg.dataobjects.Person;
 import org.cycop.reg.dataobjects.User;
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.Mockito;
-import org.mockito.MockitoAnnotations;
+import org.mockito.*;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -38,6 +35,7 @@ public class PersonControllerTest {
     @Mock
     UserController userController;
 
+    @Spy
     @InjectMocks
     PersonController personController;
 
@@ -105,8 +103,44 @@ public class PersonControllerTest {
 
     @Test
     public void testDeletePerson(){
+        List uList = new ArrayList();
+        User u = new User();
+        u.setAccountID(5);
+        uList.add(u);
+        List pList = new ArrayList();
+        Person p = new Person();
+        p.setPersonID(Long.valueOf(1));
+        pList.add(p);
+
+        Mockito.doReturn(uList).when(userController).getCurrentUser();
+        Mockito.doReturn(pList).when(personController).personSearch(1, "", 5);
+
+        try {
+            personController.deletePerson(Long.valueOf(1));
+            fail("Expected an exception.");
+        }catch (IllegalAccessError e){
+            assertEquals("User does not have the 'PER_DEL' or 'PER_DEL_ANY' permission.", e.getMessage());
+        }
+
+
+        Mockito.doReturn(true).when(userController).userHasPermission("PER_DEL");
         personController.deletePerson(Long.valueOf(1));
         Mockito.verify(personDAO).delete(Long.valueOf(1));
+
+        Mockito.doReturn(true).when(userController).userHasPermission("PER_DEL_ANY");
+        personController.deletePerson(Long.valueOf(1));
+        Mockito.verify(personDAO, Mockito.times(2)).delete(Long.valueOf(1));
+
+        List pList2 = new ArrayList();
+        Mockito.doReturn(pList2).when(personController).personSearch(2, "", 5);
+        Mockito.doReturn(false).when(userController).userHasPermission("PER_DEL_ANY");
+
+        try {
+            personController.deletePerson(Long.valueOf(2));
+            fail("Expected an exception.");
+        }catch (IllegalAccessError e){
+            assertEquals("User does not have the 'PER_DEL_ANY' permission or the user does not exist.", e.getMessage());
+        }
     }
 
     @Test
