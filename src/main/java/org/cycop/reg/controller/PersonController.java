@@ -36,14 +36,37 @@ public class PersonController {
 
     @GetMapping("/{personID}")
     public List getPerson(@PathVariable long personID) {
-        return personDAO.get(personID, "", 0);
+        return personSearch(personID, "", 0);
     }
 
+    /*
+     * Permissions used in getPersonRegistrations:
+     * REG_VIEW: Allows the user to view their registrations.
+     * REG_VIEW_ANY: Allows the user to view any registrations.
+     */
     @GetMapping("/{personID}/registrations")
     public List getPersonRegistrations(@PathVariable long personID){
-        return registrationDAO.getRegistrationByPerson(personID);
+        List pList;
+
+        if (userController.userHasPermission("REG_VIEW_ANY")){
+            return registrationDAO.getRegistrationByPerson(personID);
+        } else if (userController.userHasPermission("REG_VIEW")){
+            //check to ensure the current user has permission to see the person
+            pList = personSearch(personID, "", userController.getCurrentUser().get(0).getAccountID());
+            if (!pList.isEmpty()){
+                return registrationDAO.getRegistrationByPerson(personID);
+            }else{
+                throw new IllegalAccessError("User does not have the 'REG_VIEW_ANY' permission.");
+            }
+        }
+        throw new IllegalAccessError("User does not have the 'REG_VIEW' or 'REG_VIEW_ANY' permission.");
     }
 
+    /*
+    * Permissions used in personSearch:
+    * PER_VIEW: Allows the user to view people on their account.
+    * PER_VIEW_ANY: Allows the user to view people on any account.
+    */
     @GetMapping
     public List personSearch(@RequestParam(value="personID", defaultValue="0") long personID, @RequestParam(value="personName", defaultValue="") String personName, @RequestParam(value="accountID", defaultValue="0") long accountID) {
         if(userController.userHasPermission("PER_VIEW_ANY")){
@@ -57,6 +80,11 @@ public class PersonController {
         throw new IllegalAccessError("User does not have the 'PER_VIEW' or 'PER_VIEW_ANY' permission.");
     }
 
+    /*
+     * Permissions used in deletePerson:
+     * PER_DEL: Allows the user to delete people on their account.
+     * PER_DEL_ANY: Allows the user to delete people on any account.
+     */
     @DeleteMapping("/{personID}")
     public void deletePerson(@PathVariable long personID){
         List uList;

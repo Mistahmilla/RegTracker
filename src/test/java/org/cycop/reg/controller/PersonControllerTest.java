@@ -145,14 +145,54 @@ public class PersonControllerTest {
 
     @Test
     public void testGetPerson(){
+        List uList = new ArrayList();
+        User u = new User();
+        u.setAccountID(5);
+        uList.add(u);
+        Mockito.doReturn(true).when(userController).userHasPermission("PER_VIEW");
+        Mockito.doReturn(uList).when(userController).getCurrentUser();
         personController.getPerson(1);
-        Mockito.verify(personDAO).get(1, "", 0);
+        Mockito.verify(personController).personSearch(1, "", 0);
     }
 
     @Test
     public void testGetPersonRegistrations(){
-        personController.getPersonRegistrations(Long.valueOf(1));
-        Mockito.verify(registrationDAO).getRegistrationByPerson(Long.valueOf(1));
+        List uList = new ArrayList();
+        User u = new User();
+        u.setAccountID(2);
+        uList.add(u);
+
+        List pList = new ArrayList();
+        Person p = new Person();
+        p.setPersonID(1);
+        pList.add(p);
+
+        Mockito.doReturn(false).when(userController).userHasPermission("REG_VIEW");
+        Mockito.doReturn(false).when(userController).userHasPermission("REG_VIEW_ANY");
+        Mockito.doReturn(uList).when(userController).getCurrentUser();
+        Mockito.doReturn(pList).when(personController).personSearch(1, "", 2);
+
+        try {
+            personController.getPersonRegistrations(1);
+            fail("Expected an exception.");
+        }catch(IllegalAccessError e){
+            assertEquals("User does not have the 'REG_VIEW' or 'REG_VIEW_ANY' permission.", e.getMessage());
+        }
+        Mockito.doReturn(true).when(userController).userHasPermission("REG_VIEW");
+        personController.getPersonRegistrations(1);
+        Mockito.verify(registrationDAO).getRegistrationByPerson(1);
+
+        pList.remove(p);
+        try {
+            personController.getPersonRegistrations(1);
+            fail("Expected an exception.");
+        }catch(IllegalAccessError e){
+            assertEquals("User does not have the 'REG_VIEW_ANY' permission.", e.getMessage());
+        }
+
+        Mockito.doReturn(true).when(userController).userHasPermission("REG_VIEW_ANY");
+        personController.getPersonRegistrations(1);
+        Mockito.verify(registrationDAO, Mockito.times(2)).getRegistrationByPerson(1);
     }
 
     @Test
