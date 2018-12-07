@@ -83,8 +83,15 @@ public class PersonControllerTest {
         Mockito.when(personAddressDAO.get(1)).thenReturn(aList);
         Mockito.when(userController.getCurrentUser()).thenReturn(uList);
         Mockito.when(personDAO.get(1, "",0)).thenReturn(pList);
-        personController.addPerson(p, "Y");
 
+        try {
+            personController.addPerson(p, "Y");
+            fail("Expected an exception.");
+        }catch(IllegalAccessError e){
+            assertEquals("User does not have the 'PER_ADD' or 'PER_ADD_TO_ANY' permission.", e.getMessage());
+        }
+        Mockito.doReturn(true).when(userController).userHasPermission("PER_ADD");
+        personController.addPerson(p, "Y");
         Mockito.verify(personAddressDAO).set(1, a);
         Mockito.verify(userDAO).addPersonToAccount(1, 1);
 

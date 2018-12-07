@@ -105,8 +105,11 @@ public class PersonController {
     @PutMapping
     public List addPerson(@RequestBody Person input, @RequestParam(value="addToAccount", defaultValue="Y") String addToAccount){
         long personID;
-
         List existingAddresses;
+
+        if(!userController.userHasPermission("PER_ADD") && !userController.userHasPermission("PER_ADD_TO_ANY")){
+            throw new IllegalAccessError("User does not have the 'PER_ADD' or 'PER_ADD_TO_ANY' permission.");
+        }
 
         DataBinder db = new DataBinder(input);
         db.setValidator(new PersonValidator());
