@@ -1,10 +1,7 @@
 package org.cycop.reg.controller;
 
 import org.cycop.reg.dao.RegistrationDAO;
-import org.cycop.reg.dataobjects.Permission;
-import org.cycop.reg.dataobjects.Program;
-import org.cycop.reg.dataobjects.Registration;
-import org.cycop.reg.dataobjects.User;
+import org.cycop.reg.dataobjects.*;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -13,6 +10,7 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -42,7 +40,11 @@ public class ProgramControllerTest {
         Program p = new Program();
         p.setProgramID(1);
         r.setProgram(p);
-
+        Person per = new Person();
+        per.setFirstName("John");
+        per.setLastName("Doe");
+        r.setPerson(per);
+        r.setRegistrationDate(LocalDate.now());
         rList.add(r);
 
         Mockito.when(registrationDAO.saveOrUpdateRegistration(r)).thenReturn(rList);
@@ -67,17 +69,14 @@ public class ProgramControllerTest {
 
     @Test
     public void testPutProgramRegistration2(){
-        bPassed = true;
+
         try {
             programController.putProgramRegistration(1, r);
         }catch (Exception e){
-            bPassed = false;
             assertTrue(false);
         }
 
-        if(bPassed){
-            assertTrue(true);
-        }
+        Mockito.verify(registrationDAO).saveOrUpdateRegistration(r);
     }
 
     @Test
