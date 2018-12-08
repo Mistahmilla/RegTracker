@@ -3,7 +3,10 @@ package org.cycop.reg.controller;
 import org.cycop.reg.dao.ProgramDAO;
 import org.cycop.reg.dao.RegistrationDAO;
 import org.cycop.reg.dataobjects.Registration;
+import org.cycop.reg.dataobjects.validators.RegistrationValidator;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.DataBinder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -58,11 +61,17 @@ public class ProgramController {
             throw new IllegalArgumentException("Program ID passed in does not match program ID in registration object");
         }
 
-        //TODO: Validate the registration object being passed in
         //TODO: Allow users to only update their registrations
 
-
-
-        return registrationDAO.saveOrUpdateRegistration(input);
+        DataBinder db = new DataBinder(input);
+        db.setValidator(new RegistrationValidator());
+        db.bind(null);
+        db.validate();
+        BindingResult result = db.getBindingResult();
+        if(!result.hasErrors()) {
+            return registrationDAO.saveOrUpdateRegistration(input);
+        }else{
+            return result.getAllErrors();
+        }
     }
 }
