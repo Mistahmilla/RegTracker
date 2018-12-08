@@ -44,12 +44,19 @@ public class UserControllerTest {
         List<Person> l = new ArrayList();
         List<Person> l2 = new ArrayList();
         l2.add(p);
+
+        User u = new User();
+        u.setAccountID(1);
+        List uList = new ArrayList();
+        uList.add(u);
+        Mockito.doReturn(true).when(userController).userHasPermission("PER_ADD");
+        Mockito.doReturn(uList).when(userController).getCurrentUser();
         Mockito.when(personDAO.get(1, "", 0)).thenReturn(l).thenReturn(l2);
         Mockito.when(personDAO.saveOrUpdate(p)).thenReturn(Long.valueOf(1));
         userController.putUserPerson(1, p);
 
         Mockito.verify(personDAO).saveOrUpdate(p);
-        Mockito.verify(userDAO).addPersonToAccount(Long.valueOf(1),Long.valueOf(1));
+        Mockito.verify(userDAO).addPersonToAccount(1,1);
     }
 
     @Test
@@ -58,12 +65,35 @@ public class UserControllerTest {
         p.setPersonID(Long.valueOf(1));
         List<Person> l = new ArrayList();
         l.add(p);
+        User u = new User();
+        u.setAccountID(1);
+        List uList = new ArrayList();
+        uList.add(u);
+        Mockito.doReturn(true).when(userController).userHasPermission("PER_ADD");
+        Mockito.doReturn(false).when(userController).userHasPermission("PER_ADD_TO_ANY");
+        Mockito.doReturn(uList).when(userController).getCurrentUser();
         Mockito.when(personDAO.get(1, "", 0)).thenReturn(l).thenReturn(l);
         Mockito.when(personDAO.saveOrUpdate(p)).thenReturn(Long.valueOf(1));
         userController.putUserPerson(1, p);
 
         Mockito.verify(personDAO, Mockito.times(0)).saveOrUpdate(p);
         Mockito.verify(userDAO).addPersonToAccount(Long.valueOf(1),Long.valueOf(1));
+
+        u.setAccountID(2);
+        try{
+            userController.putUserPerson(1, p);
+            fail("Expected an exception.");
+        }catch(IllegalAccessError e){
+            assertEquals("User does not have the 'PER_ADD_TO_ANY' permission.", e.getMessage());
+        }
+
+        Mockito.doReturn(false).when(userController).userHasPermission("PER_ADD");
+        try{
+            userController.putUserPerson(2, p);
+            fail("Expected an exception.");
+        }catch(IllegalAccessError e){
+            assertEquals("User does not have the 'PER_ADD' or 'PER_ADD_TO_ANY' permission.", e.getMessage());
+        }
     }
 
     @Test

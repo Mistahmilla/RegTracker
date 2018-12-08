@@ -50,6 +50,14 @@ public class UserController {
     public List putUserPerson(@PathVariable long userID, @RequestBody Person input){
         //TODO; verify they are only adding a person to their own account
 
+        if(getCurrentUser().get(0).getAccountID() != userID && !userHasPermission("PER_ADD_TO_ANY") ){
+            throw new IllegalAccessError("User does not have the 'PER_ADD_TO_ANY' permission.");
+        }
+
+        if(!userHasPermission("PER_ADD") && !userHasPermission("PER_ADD_TO_ANY")){
+            throw new IllegalAccessError("User does not have the 'PER_ADD' or 'PER_ADD_TO_ANY' permission.");
+        }
+
         Person existingPerson;
         List<Person> l = personDAO.get(input.getPersonID(), "", 0);
         if (l.isEmpty()){

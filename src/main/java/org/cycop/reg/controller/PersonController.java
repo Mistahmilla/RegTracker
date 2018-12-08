@@ -102,6 +102,10 @@ public class PersonController {
         }
     }
 
+    /*
+     * Permissions used in addPerson:
+     * PER_ADD or PER_ADD_TO_ANY: Either permission will allow the user to add a person
+     */
     @PutMapping
     public List addPerson(@RequestBody Person input, @RequestParam(value="addToAccount", defaultValue="Y") String addToAccount){
         long personID;
