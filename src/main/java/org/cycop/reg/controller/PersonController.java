@@ -121,30 +121,30 @@ public class PersonController {
         db.validate();
         BindingResult result = db.getBindingResult();
 
-        if(!result.hasErrors()) {
-            personID = personDAO.saveOrUpdate(input);
-            if(input.getCurrentAddress() != null){
-                existingAddresses = personAddressDAO.get(personID);
-                if((existingAddresses.size()==1 && !addressesMatch(input.getCurrentAddress(), (Address)existingAddresses.get(0))) || existingAddresses.isEmpty()) {
-                    personAddressDAO.set(personID, input.getCurrentAddress());
-                }
-            }
-
-            if(addToAccount.equals("Y")){
-                List<User> userList;
-                User currentUser;
-                //get the current user and add the person to the account
-                userList = userController.getCurrentUser();
-                if (!userList.isEmpty()) {
-                    currentUser = userList.get(0);
-                    userDAO.addPersonToAccount(currentUser.getAccountID(), personID);
-                }
-            }
-
-            return personDAO.get(personID, "", 0);
-        }else{
+        if(result.hasErrors()) {
             return result.getAllErrors();
         }
+
+        personID = personDAO.saveOrUpdate(input);
+        if(input.getCurrentAddress() != null){
+            existingAddresses = personAddressDAO.get(personID);
+            if((existingAddresses.size()==1 && !addressesMatch(input.getCurrentAddress(), (Address)existingAddresses.get(0))) || existingAddresses.isEmpty()) {
+                personAddressDAO.set(personID, input.getCurrentAddress());
+            }
+        }
+
+        if(addToAccount.equals("Y")){
+            List<User> userList;
+            User currentUser;
+            //get the current user and add the person to the account
+            userList = userController.getCurrentUser();
+            if (!userList.isEmpty()) {
+                currentUser = userList.get(0);
+                userDAO.addPersonToAccount(currentUser.getAccountID(), personID);
+            }
+        }
+
+        return personDAO.get(personID, "", 0);
     }
 
     private boolean addressesMatch(Address a, Address b){

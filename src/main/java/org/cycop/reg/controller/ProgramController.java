@@ -10,6 +10,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.DataBinder;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Iterator;
 import java.util.List;
 
 @RestController
@@ -46,12 +47,14 @@ public class ProgramController {
             return registrationDAO.getRegistrationByProgram(programID);
         }else if(userController.userHasPermission("REG_VIEW")){
             rList = registrationDAO.getRegistrationByAccount(userController.getCurrentUser().get(0).getAccountID());
-            for (int i = 0; i < rList.size(); i++){
-                if(rList.get(i).getProgram().getProgramID() != programID){
-                    rList.remove(i);
-                    i--;
+
+            for (Iterator<Registration> iterator = rList.iterator(); iterator.hasNext();) {
+                Registration reg = iterator.next();
+                if (reg.getProgram().getProgramID() != programID) {
+                    iterator.remove();
                 }
             }
+
             return rList;
         }else{
             throw new IllegalAccessError("User does not have the 'REG_VIEW' or 'REG_VIEW_ANY' permission.");

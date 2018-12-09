@@ -150,6 +150,70 @@ public class ProgramControllerTest {
         Mockito.doReturn(rList).when(registrationDAO).getRegistrationByAccount(1);
         List returnList = programController.getProgramRegistrations(2);
         assertEquals(2, returnList.size());
+
+        rList.clear();
+        rList.add(r1);
+        rList.add(r2);
+        rList.add(r3);
+
+        returnList = programController.getProgramRegistrations(1);
+        assertEquals(1, returnList.size());
+    }
+
+    @Test
+    public void testGetRegistrationsVIEW2(){
+        Permission p = new Permission();
+        p.setPermissionCode("REG_VIEW");
+        User u = new User();
+        u.setAccountID(1);
+        u.addPermission(p);
+        List uList = new ArrayList();
+        uList.add(u);
+        Mockito.doReturn(uList).when(userController).getCurrentUser();
+        Mockito.doReturn(true).when(userController).userHasPermission("REG_VIEW");
+
+        programController.getProgramRegistrations(2);
+        Mockito.verify(registrationDAO).getRegistrationByAccount(1);
+
+        List rList = new ArrayList();
+        Registration r1 = new Registration();
+        Program p1 = new Program();
+        p1.setProgramID(1);
+        r1.setProgram(p1);
+
+        Registration r2 = new Registration();
+        Program p2 = new Program();
+        p2.setProgramID(2);
+        r2.setProgram(p2);
+
+        Registration r3 = new Registration();
+        Program p3 = new Program();
+        p3.setProgramID(2);
+        r3.setProgram(p3);
+
+        Registration r4 = new Registration();
+        Program p4 = new Program();
+        p4.setProgramID(1);
+        r4.setProgram(p4);
+
+        rList.add(r1);
+        rList.add(r2);
+        rList.add(r3);
+        rList.add(r4);
+
+        Mockito.doReturn(rList).when(registrationDAO).getRegistrationByAccount(1);
+        List returnList = programController.getProgramRegistrations(2);
+        assertEquals(2, returnList.size());
+
+        rList.clear();
+        rList.add(r1);
+        rList.add(r2);
+        rList.add(r3);
+        rList.add(r4);
+
+        Mockito.doReturn(rList).when(registrationDAO).getRegistrationByAccount(1);
+        returnList = programController.getProgramRegistrations(1);
+        assertEquals(2, returnList.size());
     }
 
     @Test
