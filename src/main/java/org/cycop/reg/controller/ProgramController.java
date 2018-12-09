@@ -1,5 +1,6 @@
 package org.cycop.reg.controller;
 
+import org.cycop.reg.dao.PersonDAO;
 import org.cycop.reg.dao.ProgramDAO;
 import org.cycop.reg.dao.RegistrationDAO;
 import org.cycop.reg.dataobjects.Registration;
@@ -23,6 +24,9 @@ public class ProgramController {
 
     @Autowired
     UserController userController;
+
+    @Autowired
+    PersonDAO personDAO;
 
     @GetMapping
     public List getAllPrograms(){
@@ -57,11 +61,21 @@ public class ProgramController {
     @PutMapping("/{programID}/registrations")
     public List putProgramRegistration(@PathVariable long programID, @RequestBody Registration input){
 
+        List pList;
         if (programID != input.getProgram().getProgramID()){
             throw new IllegalArgumentException("Program ID passed in does not match program ID in registration object");
         }
 
-        //TODO: Allow users to only update their registrations
+        pList = personDAO.get(input.getPerson().getPersonID(), "", userController.getCurrentUser().get(0).getAccountID());
+        if(pList.size() == 0 && !userController.userHasPermission("REG_UPDATE_ANY")){
+            throw new IllegalAccessError("User does not have the 'REG_UPDATE_ANY' permission.");
+        }
+        if(pList.size() == 1 && (!userController.userHasPermission("REG_UPDATE") && !userController.userHasPermission("REG_UPDATE_ANY"))){
+            throw new IllegalAccessError("User does not have the 'REG_UPDATE' permission.");
+        }
+        if(pList.isEmpty()){
+            throw new IllegalArgumentException("Person passed in is not valid.");
+        }
 
         DataBinder db = new DataBinder(input);
         db.setValidator(new RegistrationValidator());

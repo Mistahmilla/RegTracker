@@ -1,20 +1,19 @@
 package org.cycop.reg.controller;
 
+import org.cycop.reg.dao.PersonDAO;
 import org.cycop.reg.dao.RegistrationDAO;
 import org.cycop.reg.dataobjects.*;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.Mockito;
-import org.mockito.MockitoAnnotations;
+import org.mockito.*;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
 import static junit.framework.TestCase.*;
+import static org.mockito.Matchers.any;
 
 public class ProgramControllerTest {
 
@@ -24,7 +23,11 @@ public class ProgramControllerTest {
     @Mock
     UserController userController;
 
+    @Mock
+    PersonDAO personDAO;
+
     @InjectMocks
+    @Spy
     ProgramController programController;
 
     boolean bPassed;
@@ -41,6 +44,7 @@ public class ProgramControllerTest {
         p.setProgramID(1);
         r.setProgram(p);
         Person per = new Person();
+        per.setPersonID(2);
         per.setFirstName("John");
         per.setLastName("Doe");
         r.setPerson(per);
@@ -70,13 +74,38 @@ public class ProgramControllerTest {
     @Test
     public void testPutProgramRegistration2(){
 
+        Person per2 = new Person();
+        per2.setPersonID(2);
+        List pList = new ArrayList();
+
+        User u = new User();
+        List uList = new ArrayList();
+        u.setAccountID(4);
+        uList.add(u);
+
+        Mockito.doReturn(false).when(userController).userHasPermission("REG_UPDATE_ANY");
+        Mockito.doReturn(uList).when(userController).getCurrentUser();
+        Mockito.doReturn(pList).when(personDAO).get(2, "", 4);
         try {
             programController.putProgramRegistration(1, r);
-        }catch (Exception e){
-            assertTrue(false);
+            fail("Expected an exception.");
+        }catch(IllegalAccessError e){
+            assertEquals("User does not have the 'REG_UPDATE_ANY' permission.", e.getMessage());
         }
 
+        Mockito.doReturn(true).when(userController).userHasPermission("REG_UPDATE_ANY");
+        pList.add(per2);
+        programController.putProgramRegistration(1, r);
         Mockito.verify(registrationDAO).saveOrUpdateRegistration(r);
+
+        Mockito.doReturn(false).when(userController).userHasPermission("REG_UPDATE_ANY");
+        Mockito.doReturn(false).when(userController).userHasPermission("REG_UPDATE");
+        try {
+            programController.putProgramRegistration(1, r);
+            fail("Expected an exception.");
+        }catch(IllegalAccessError e){
+            assertEquals("User does not have the 'REG_UPDATE' permission.", e.getMessage());
+        }
     }
 
     @Test
@@ -142,7 +171,7 @@ public class ProgramControllerTest {
         List uList = new ArrayList();
         uList.add(u);
         Mockito.doReturn(uList).when(userController).getCurrentUser();
-        Mockito.doReturn(false).when(userController).userHasPermission(Mockito.any());
+        Mockito.doReturn(false).when(userController).userHasPermission(any());
 
         try {
             programController.getProgramRegistrations(2);
