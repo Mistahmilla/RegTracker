@@ -16,6 +16,7 @@ import java.util.List;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 import static org.mockito.Matchers.any;
+import static org.mockito.Mockito.times;
 
 public class UserControllerTest {
 
@@ -76,7 +77,7 @@ public class UserControllerTest {
         Mockito.when(personDAO.saveOrUpdate(p)).thenReturn(Long.valueOf(1));
         userController.putUserPerson(1, p);
 
-        Mockito.verify(personDAO, Mockito.times(0)).saveOrUpdate(p);
+        Mockito.verify(personDAO, times(0)).saveOrUpdate(p);
         Mockito.verify(userDAO).addPersonToAccount(Long.valueOf(1),Long.valueOf(1));
 
         u.setAccountID(2);
@@ -187,6 +188,41 @@ public class UserControllerTest {
             fail("Expected an exception");
         }catch(IllegalAccessError e) {
             assertEquals("User does not have the 'USER_UPDATE_ANY' permission.", e.getMessage());
+        }
+    }
+
+    @Test
+    public void testDeleteUserPerson(){
+        List uList = new ArrayList();
+        User u = new User();
+        u.setAccountID(1);
+        uList.add(u);
+
+        Mockito.doReturn(true).when(userController).userHasPermission("PER_DEL");
+        Mockito.doReturn(false).when(userController).userHasPermission("PER_DEL_ANY");
+        Mockito.doReturn(uList).when(userController).getCurrentUser();
+
+        userController.deleteUserPerson(1, 2);
+        Mockito.verify(userDAO).removePersonFromAccount(1, 2);
+
+        Mockito.doReturn(true).when(userController).userHasPermission("PER_DEL_ANY");
+        userController.deleteUserPerson(2, 2);
+        Mockito.verify(userDAO).removePersonFromAccount(2, 2);
+
+        Mockito.doReturn(false).when(userController).userHasPermission("PER_DEL_ANY");
+        try{
+            userController.deleteUserPerson(2, 2);
+            fail("Expected an exception.");
+        }catch(IllegalAccessError e){
+            assertEquals("User does not have the 'PER_DEL_ANY' permission.", e.getMessage());
+        }
+
+        Mockito.doReturn(false).when(userController).userHasPermission("PER_DEL");
+        try{
+            userController.deleteUserPerson(1, 2);
+            fail("Expected an exception.");
+        }catch(IllegalAccessError e){
+            assertEquals("User does not have the 'PER_DEL' or 'PER_DEL_ANY' permission.", e.getMessage());
         }
     }
 }

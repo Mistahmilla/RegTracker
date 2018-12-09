@@ -48,7 +48,6 @@ public class UserController {
 
     @PutMapping("{userID}/person")
     public List putUserPerson(@PathVariable long userID, @RequestBody Person input){
-        //TODO; verify they are only adding a person to their own account
 
         if(getCurrentUser().get(0).getAccountID() != userID && !userHasPermission("PER_ADD_TO_ANY") ){
             throw new IllegalAccessError("User does not have the 'PER_ADD_TO_ANY' permission.");
@@ -71,7 +70,18 @@ public class UserController {
         return getUserPeople(userID);
     }
 
-    //TODO: Add delete mapping for user persons
+    @DeleteMapping("{userID}/person/{personID}")
+    public void deleteUserPerson(@PathVariable long userID, @PathVariable long personID){
+        if(getCurrentUser().get(0).getAccountID() != userID && !userHasPermission("PER_DEL_ANY") ){
+            throw new IllegalAccessError("User does not have the 'PER_DEL_ANY' permission.");
+        }
+
+        if(!userHasPermission("PER_DEL") && !userHasPermission("PER_DEL_ANY")){
+            throw new IllegalAccessError("User does not have the 'PER_DEL' or 'PER_DEL_ANY' permission.");
+        }
+
+        userDAO.removePersonFromAccount(userID, personID);
+    }
 
     @PutMapping
     public List updateUser(@RequestBody User input) {
