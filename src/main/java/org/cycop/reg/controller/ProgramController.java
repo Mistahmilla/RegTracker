@@ -67,7 +67,7 @@ public class ProgramController {
         }
 
         pList = personDAO.get(input.getPerson().getPersonID(), "", userController.getCurrentUser().get(0).getAccountID());
-        if(pList.size() == 0 && !userController.userHasPermission("REG_UPDATE_ANY")){
+        if(pList.isEmpty() && !userController.userHasPermission("REG_UPDATE_ANY")){
             throw new IllegalAccessError("User does not have the 'REG_UPDATE_ANY' permission.");
         }
         if(pList.size() == 1 && (!userController.userHasPermission("REG_UPDATE") && !userController.userHasPermission("REG_UPDATE_ANY"))){

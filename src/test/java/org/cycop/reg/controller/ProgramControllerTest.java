@@ -1,6 +1,7 @@
 package org.cycop.reg.controller;
 
 import org.cycop.reg.dao.PersonDAO;
+import org.cycop.reg.dao.ProgramDAO;
 import org.cycop.reg.dao.RegistrationDAO;
 import org.cycop.reg.dataobjects.*;
 import org.junit.Assert;
@@ -19,6 +20,9 @@ public class ProgramControllerTest {
 
     @Mock
     RegistrationDAO registrationDAO;
+
+    @Mock
+    ProgramDAO programDAO;
 
     @Mock
     UserController userController;
@@ -179,6 +183,15 @@ public class ProgramControllerTest {
         }catch(IllegalAccessError e){
             Assert.assertEquals("User does not have the 'REG_VIEW' or 'REG_VIEW_ANY' permission.", e.getMessage());
         }
+    }
+
+    @Test
+    public void testGet(){
+        programController.getProgram(1);
+        Mockito.verify(programDAO).get(1);
+
+        programController.getAllPrograms();
+        Mockito.verify(programDAO).get();
     }
 
 }

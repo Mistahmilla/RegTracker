@@ -40,7 +40,7 @@ public class UserControllerTest {
     @Test
     public void testPutUserPerson(){
         Person p = new Person();
-        p.setPersonID(Long.valueOf(1));
+        p.setPersonID(1);
         List<Person> l = new ArrayList();
         List<Person> l2 = new ArrayList();
         l2.add(p);
@@ -62,7 +62,7 @@ public class UserControllerTest {
     @Test
     public void testPutUserPerson2(){
         Person p = new Person();
-        p.setPersonID(Long.valueOf(1));
+        p.setPersonID(1);
         List<Person> l = new ArrayList();
         l.add(p);
         User u = new User();
@@ -99,9 +99,9 @@ public class UserControllerTest {
     @Test
     public void testUpdateUserBadUser(){
         List<User> l = new ArrayList();
-        Mockito.when(userController.getUser(Long.valueOf(1))).thenReturn(l);
+        Mockito.when(userController.getUser(1)).thenReturn(l);
         User u = new User();
-        u.setAccountID(Long.valueOf(1));
+        u.setAccountID(1);
         try {
             userController.updateUser(u);
             fail("Expected an exception");
@@ -114,7 +114,7 @@ public class UserControllerTest {
     public void testUpdateUserGoodUser() {
         List<User> l = new ArrayList();
         User u = new User();
-        u.setAccountID(Long.valueOf(1));
+        u.setAccountID(1);
         u.setEmailAddress("john@doe.com");
         u.setPassword("test");
         Permission p = new Permission();
@@ -122,7 +122,7 @@ public class UserControllerTest {
         u.addPermission(p);
         l.add(u);
 
-        Mockito.when(userController.getUser(Long.valueOf(1))).thenReturn(l);
+        Mockito.when(userController.getUser(1)).thenReturn(l);
         Mockito.when(userDAO.getUserByEmailAddress(any())).thenReturn(l);
         Mockito.doReturn(l).when(userController).getCurrentUser();
 
@@ -134,7 +134,7 @@ public class UserControllerTest {
     public void testUpdateUserGoodUserBadAccess() {
         List<User> l = new ArrayList();
         User u = new User();
-        u.setAccountID(Long.valueOf(1));
+        u.setAccountID(1);
         u.setEmailAddress("john@doe.com");
         u.setPassword("test");
         Permission p = new Permission();
@@ -142,7 +142,7 @@ public class UserControllerTest {
         u.addPermission(p);
         l.add(u);
 
-        Mockito.when(userController.getUser(Long.valueOf(1))).thenReturn(l);
+        Mockito.when(userController.getUser(1)).thenReturn(l);
         Mockito.when(userDAO.getUserByEmailAddress(any())).thenReturn(l);
         Mockito.doReturn(l).when(userController).getCurrentUser();
 
@@ -158,7 +158,7 @@ public class UserControllerTest {
     public void testUpdateUserGoodUserBadAccess2() {
         List<User> l = new ArrayList();
         User u = new User();
-        u.setAccountID(Long.valueOf(1));
+        u.setAccountID(1);
         u.setEmailAddress("john@doe.com");
         u.setPassword("test");
         Permission p = new Permission();
@@ -168,7 +168,7 @@ public class UserControllerTest {
 
         List<User> l2 = new ArrayList();
         User u2 = new User();
-        u2.setAccountID(Long.valueOf(2));
+        u2.setAccountID(2);
         u2.setEmailAddress("john2@doe.com");
         u2.setPassword("test");
         Permission p2 = new Permission();
@@ -176,8 +176,8 @@ public class UserControllerTest {
         u2.addPermission(p2);
         l2.add(u2);
 
-        Mockito.doReturn(l).when(userController).getUser(Long.valueOf(1));
-        Mockito.doReturn(l2).when(userController).getUser(Long.valueOf(2));
+        Mockito.doReturn(l).when(userController).getUser(1);
+        Mockito.doReturn(l2).when(userController).getUser(2);
         Mockito.when(userDAO.getUserByEmailAddress("john@doe.com")).thenReturn(l);
         Mockito.when(userDAO.getUserByEmailAddress("john2@doe.com")).thenReturn(l2);
         Mockito.doReturn(l2).when(userController).getCurrentUser();

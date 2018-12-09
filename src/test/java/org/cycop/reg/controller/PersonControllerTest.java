@@ -66,7 +66,7 @@ public class PersonControllerTest {
         p.setLastName("Doe");
         p.setBirthDate(LocalDate.now());
         p.setCurrentAddress(a);
-        p.setPersonID(Long.valueOf(1));
+        p.setPersonID(1);
 
         List<Address> aList = new ArrayList();
         aList.add(b);
@@ -218,13 +218,13 @@ public class PersonControllerTest {
         Mockito.doReturn(true).when(userController).userHasPermission("PER_VIEW");
         Mockito.doReturn(uList).when(userController).getCurrentUser();
         personController.personSearch(0, "", 0);
-        Mockito.verify(personDAO).get(Long.valueOf(0), "", 5);
+        Mockito.verify(personDAO).get(0, "", 5);
 
         personController.personSearch(1, "", 0);
-        Mockito.verify(personDAO).get(Long.valueOf(1), "", 5);
+        Mockito.verify(personDAO).get(1, "", 5);
 
         personController.personSearch(0, "test", 0);
-        Mockito.verify(personDAO).get(Long.valueOf(0),"test",5);
+        Mockito.verify(personDAO).get(0,"test",5);
 
         try{
             personController.personSearch(0, "", 6);
@@ -235,12 +235,12 @@ public class PersonControllerTest {
 
         Mockito.doReturn(true).when(userController).userHasPermission("PER_VIEW_ANY");
         personController.personSearch(0, "", 0);
-        Mockito.verify(personDAO).get(Long.valueOf(0), "", 0);
+        Mockito.verify(personDAO).get(0, "", 0);
 
         personController.personSearch(1, "", 0);
-        Mockito.verify(personDAO).get(Long.valueOf(1), "", 0);
+        Mockito.verify(personDAO).get(1, "", 0);
 
         personController.personSearch(0, "test", 0);
-        Mockito.verify(personDAO).get(Long.valueOf(0),"test",0);
+        Mockito.verify(personDAO).get(0,"test",0);
     }
 }

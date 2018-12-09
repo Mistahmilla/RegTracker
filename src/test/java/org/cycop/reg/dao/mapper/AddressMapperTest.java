@@ -28,7 +28,7 @@ public class AddressMapperTest {
             Mockito.when(rs.next()).thenReturn(true).thenReturn(false);
             a = am.mapRow(rs, 1);
 
-            assertEquals((long)Long.valueOf(1),a.getAddressID());
+            assertEquals(1,a.getAddressID());
             assertEquals("Street", a.getStreetAddress());
             assertEquals("City", a.getCity());
             assertEquals("State", a.getState());
