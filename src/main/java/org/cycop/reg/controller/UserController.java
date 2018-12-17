@@ -99,7 +99,10 @@ public class UserController {
             throw new IllegalAccessError("User does not have the 'USER_UPDATE' permission.");
         }
 
-
+        //determine if roles are changing, if so require the 'USER_UPDATE_ROLE' permission
+        if((!input.getRoles().containsAll(returnedUsers.get(0).getRoles()) || !returnedUsers.get(0).getRoles().containsAll(input.getRoles()) && !userHasPermission("USER_UPDATE_ROLE")) ){
+            throw new IllegalAccessError("User does not have the 'USER_UPDATE_ROLE' permission.");
+        }
 
         //validate user
         DataBinder db = new DataBinder(input);
@@ -108,7 +111,6 @@ public class UserController {
         db.validate();
         BindingResult result = db.getBindingResult();
 
-        //TODO: if roles are changing add logic to ensure they have permission to update roles
         //TODO: if active/etc flags are changing ensure the logged in user has permission to change them
         if(!result.hasErrors()) {
             //update user

@@ -4,6 +4,7 @@ import org.cycop.reg.dao.PersonDAO;
 import org.cycop.reg.dao.UserDAO;
 import org.cycop.reg.dataobjects.Permission;
 import org.cycop.reg.dataobjects.Person;
+import org.cycop.reg.dataobjects.Role;
 import org.cycop.reg.dataobjects.User;
 import org.cycop.reg.security.AuthenticationFacade;
 import org.junit.Before;
@@ -166,6 +167,7 @@ public class UserControllerTest {
         p.setPermissionCode("nUSER_UPDATE");
         u.addPermission(p);
         l.add(u);
+        u.addRole(new Role("USER", "USER"));
 
         List<User> l2 = new ArrayList();
         User u2 = new User();
@@ -176,6 +178,7 @@ public class UserControllerTest {
         p2.setPermissionCode("nUSER_UPDATE");
         u2.addPermission(p2);
         l2.add(u2);
+        u2.addRole(new Role("ADMIN", "ADMIN"));
 
         Mockito.doReturn(l).when(userController).getUser(1);
         Mockito.doReturn(l2).when(userController).getUser(2);
@@ -188,6 +191,19 @@ public class UserControllerTest {
             fail("Expected an exception");
         }catch(IllegalAccessError e) {
             assertEquals("User does not have the 'USER_UPDATE_ANY' permission.", e.getMessage());
+        }
+
+        u.setAccountID(2);
+        Permission p3 = new Permission();
+        p3.setPermissionCode("USER_UPDATE");
+        u2.addPermission(p3);
+        p2.setPermissionCode("USER_UPDATE_ANY");
+        u.addRole(new Role("new", "new"));
+        try {
+            userController.updateUser(u);
+            fail("Expected an exception");
+        }catch(IllegalAccessError e) {
+            assertEquals("User does not have the 'USER_UPDATE_ROLE' permission.", e.getMessage());
         }
     }
 
