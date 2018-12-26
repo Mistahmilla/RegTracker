@@ -99,9 +99,8 @@ public class Account implements UserDetails {
 
     @Override
     public boolean isEnabled() {
-        if (accountLocked || !accountVerified || passwordExpired){
-            return false;
-        }
-        return true;
+
+        return !(accountLocked || !accountVerified || passwordExpired);
+
     }
 }
