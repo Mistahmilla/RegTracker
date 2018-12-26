@@ -20,5 +20,6 @@ public class AuthorityTest {
         assertEquals("ONE", a1.getAuthorityDescription());
         String s = "test";
         assertNotEquals(a1, s);
+        assertEquals("ONE", a1.getAuthorityName());
     }
 }
