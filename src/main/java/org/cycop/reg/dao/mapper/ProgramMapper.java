@@ -1,8 +1,6 @@
 package org.cycop.reg.dao.mapper;
 
 import org.cycop.reg.dataobjects.Program;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Component;
 
@@ -11,8 +9,6 @@ import java.sql.SQLException;
 
 @Component
 public class ProgramMapper  implements RowMapper<Program> {
-
-    private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     @Override
     public Program mapRow(ResultSet resultSet, int i) throws SQLException {
