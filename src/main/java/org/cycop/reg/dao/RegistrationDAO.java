@@ -82,10 +82,18 @@ public class RegistrationDAO {
         }else {
             params[2] = Date.valueOf(registration.getRegistrationDate());
         }
-        params[3] = registration.getRank().getRankCode();
-        params[4] = registration.getGrade().getGradeCode();
-        params[5] = registration.getShirtSize().getShirtSizeCode();
-        params[6] = registration.getAddress().getAddressID();
+        if(registration.getRank() != null) {
+            params[3] = registration.getRank().getRankCode();
+        }
+        if(registration.getGrade() != null) {
+            params[4] = registration.getGrade().getGradeCode();
+        }
+        if(registration.getShirtSize() != null) {
+            params[5] = registration.getShirtSize().getShirtSizeCode();
+        }
+        if(registration.getAddress() != null) {
+            params[6] = registration.getAddress().getAddressID();
+        }
 
         if (!bNewReg){
             if(registration.getRegistrationCancelDate() != null) {
