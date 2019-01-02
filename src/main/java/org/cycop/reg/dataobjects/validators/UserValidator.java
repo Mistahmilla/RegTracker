@@ -11,8 +11,6 @@ import java.util.regex.Pattern;
 public class UserValidator implements Validator {
 
     private static final String EMAIL_PATTERN = "^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$";
-    private Pattern pattern;
-    private Matcher matcher;
 
     @Override
     public boolean supports(Class aClass) {
@@ -21,6 +19,10 @@ public class UserValidator implements Validator {
 
     @Override
     public void validate(Object o, Errors errors) {
+
+        Pattern pattern;
+        Matcher matcher;
+
         User u = (User)o;
         ValidationUtils.rejectIfEmpty(errors, "emailAddress", "emailAddress.empty", "Email address can not be blank.");
         ValidationUtils.rejectIfEmpty(errors, "password", "password.empty", "Password can not be blank.");
