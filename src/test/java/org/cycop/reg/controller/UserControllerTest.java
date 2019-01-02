@@ -193,11 +193,11 @@ public class UserControllerTest {
             assertEquals("User does not have the 'USER_UPDATE_ANY' permission.", e.getMessage());
         }
 
-        u.setAccountID(2);
         Permission p3 = new Permission();
         p3.setPermissionCode("USER_UPDATE");
         u2.addPermission(p3);
         p2.setPermissionCode("USER_UPDATE_ANY");
+        u.setAccountID(2);
         u.addRole(new Role("new", "new"));
         try {
             userController.updateUser(u);
@@ -208,7 +208,55 @@ public class UserControllerTest {
     }
 
     @Test
-    public void testDeleteUserPerson(){
+    public void testUpdateActiveFlags(){
+
+        Permission p = new Permission();
+        p.setPermissionCode("USER_UPDATE");
+
+        Permission p2 = new Permission();
+        p2.setPermissionCode("USER_UPDATE_ANY");
+
+        List<User> l = new ArrayList();
+        User u = new User();
+        u.setAccountID(1);
+        u.setEmailAddress("john@doe.com");
+        u.setPassword("test");
+        u.addPermission(p);
+        u.addPermission(p2);
+        l.add(u);
+        u.addRole(new Role("USER", "USER"));
+
+        List<User> l2 = new ArrayList();
+        User u2 = new User();
+        u2.setAccountID(2);
+        u2.setEmailAddress("john2@doe.com");
+        u2.setPassword("test");
+        u2.addPermission(p);
+        u2.addPermission(p2);
+        l2.add(u2);
+        u2.addRole(new Role("USER", "USER"));
+
+        Mockito.doReturn(l2).when(userController).getUser(1);
+        Mockito.doReturn(l2).when(userController).getUser(2);
+        Mockito.doReturn(l2).when(userController).getCurrentUser();
+        Mockito.when(userDAO.getUserByEmailAddress("john@doe.com")).thenReturn(l);
+        Mockito.when(userDAO.getUserByEmailAddress("john2@doe.com")).thenReturn(l2);
+        Mockito.doReturn(l).when(userDAO).getUserByAccountID(1);
+        Mockito.doReturn(l2).when(userDAO).getUserByAccountID(2);
+        Mockito.doReturn(l2).when(userController).getCurrentUser();
+        Mockito.doReturn(u2.getAccountID()).when(userDAO).updateExisting(u2, u);
+
+        u.setAccountVerified(true);
+        try {
+            userController.updateUser(u);
+            fail("Expected an exception");
+        }catch(IllegalAccessError e) {
+            assertEquals("User does not have the 'USER_ACTIVE_FLAGS' permission.", e.getMessage());
+        }
+    }
+
+    @Test
+    public void testDeleteUserPerson() {
         List uList = new ArrayList();
         User u = new User();
         u.setAccountID(1);
@@ -226,18 +274,18 @@ public class UserControllerTest {
         Mockito.verify(userDAO).removePersonFromAccount(2, 2);
 
         Mockito.doReturn(false).when(userController).userHasPermission("PER_DEL_ANY");
-        try{
+        try {
             userController.deleteUserPerson(2, 2);
             fail("Expected an exception.");
-        }catch(IllegalAccessError e){
+        } catch (IllegalAccessError e) {
             assertEquals("User does not have the 'PER_DEL_ANY' permission.", e.getMessage());
         }
 
         Mockito.doReturn(false).when(userController).userHasPermission("PER_DEL");
-        try{
+        try {
             userController.deleteUserPerson(1, 2);
             fail("Expected an exception.");
-        }catch(IllegalAccessError e){
+        } catch (IllegalAccessError e) {
             assertEquals("User does not have the 'PER_DEL' or 'PER_DEL_ANY' permission.", e.getMessage());
         }
     }

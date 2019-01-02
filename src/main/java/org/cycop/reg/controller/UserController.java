@@ -104,6 +104,11 @@ public class UserController {
             throw new IllegalAccessError("User does not have the 'USER_UPDATE_ROLE' permission.");
         }
 
+        //if active/etc flags are changing ensure the logged in user has permission to change them
+        if((input.getAccountLocked()!= returnedUsers.get(0).getAccountLocked() || input.getAccountVerified() != returnedUsers.get(0).getAccountVerified() || input.getPasswordExpired() != returnedUsers.get(0).getPasswordExpired()) && !userHasPermission("USER_ACTIVE_FLAGS")){
+            throw new IllegalAccessError("User does not have the 'USER_ACTIVE_FLAGS' permission.");
+        }
+
         //validate user
         DataBinder db = new DataBinder(input);
         db.setValidator(new UserValidator());
@@ -111,7 +116,6 @@ public class UserController {
         db.validate();
         BindingResult result = db.getBindingResult();
 
-        //TODO: if active/etc flags are changing ensure the logged in user has permission to change them
         if(!result.hasErrors()) {
             //update user
             return userDAO.getUserByAccountID(userDAO.updateExisting(input, userDAO.getUserByAccountID(input.getAccountID()).get(0)));
