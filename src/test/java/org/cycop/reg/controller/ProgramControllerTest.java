@@ -87,8 +87,17 @@ public class ProgramControllerTest {
         u.setAccountID(4);
         uList.add(u);
 
-        Mockito.doReturn(false).when(userController).userHasPermission("REG_UPDATE_ANY");
+
         Mockito.doReturn(uList).when(userController).getCurrentUser();
+        Mockito.doReturn(true).when(userController).userHasPermission("REG_UPDATE_ANY");
+        try {
+            programController.putProgramRegistration(1, r);
+            fail("Expected an exception.");
+        }catch(IllegalArgumentException e){
+            assertEquals("Person passed in is not valid.", e.getMessage());
+        }
+
+        Mockito.doReturn(false).when(userController).userHasPermission("REG_UPDATE_ANY");
         Mockito.doReturn(pList).when(personDAO).get(2, "", 4);
         try {
             programController.putProgramRegistration(1, r);
