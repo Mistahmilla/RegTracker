@@ -27,10 +27,12 @@ public class RegisterController {
 
     @PostMapping
     public List registerAccount(@RequestBody User input){
-        input.addRole(roleRepository.getRoleByCode("USER").get(0));
+        if(!roleRepository.getRoleByCode("USER").isEmpty()) {
+            input.addRole(roleRepository.getRoleByCode("USER").get(0));
+        }
         logger.info("Creating new user");
         long userID = userDAO.createNew(input);
-        logger.info("User created: " + userID);
+        logger.info("User created: {}", userID);
         return userDAO.getUserByAccountID(userID);
     }
 }

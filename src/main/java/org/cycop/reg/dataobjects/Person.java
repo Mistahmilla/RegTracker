@@ -16,7 +16,7 @@ public class Person extends DataObject {
     @JsonDeserialize(using = LocalDateDeserializer.class)
     @JsonSerialize(using = LocalDateSerializer.class)
     private LocalDate birthDate;
-    private Long personID;
+    private long personID;
     private Gender gender;
     private Address currentAddress;
 
@@ -68,11 +68,11 @@ public class Person extends DataObject {
         return birthDate;
     }
 
-    public void setPersonID(Long personID){
+    public void setPersonID(long personID){
         this.personID = personID;
     }
 
-    public Long getPersonID(){
+    public long getPersonID(){
         return personID;
     }
 

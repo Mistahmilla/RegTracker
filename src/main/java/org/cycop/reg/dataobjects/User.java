@@ -10,6 +10,7 @@ public class User extends DataObject {
     private String password;
     private String salt;
     private List<Role> roles;
+    private List<Permission> permissions;
     private Person person;
     private boolean accountLocked;
     private boolean accountVerified;
@@ -17,6 +18,7 @@ public class User extends DataObject {
 
     public User(){
         roles = new ArrayList();
+        permissions = new ArrayList();
     }
 
     public long getAccountID(){
@@ -61,8 +63,22 @@ public class User extends DataObject {
         roles.remove(role);
     }
 
+    public void removePermission(Permission p){
+        permissions.remove(p);
+    }
+
     public List<Role> getRoles(){
         return roles;
+    }
+
+    public void addPermission(Permission p){
+        if(!permissions.contains(p)){
+            permissions.add(p);
+        }
+    }
+
+    public List<Permission> getPermissions(){
+        return permissions;
     }
 
     public void setPerson(Person person){

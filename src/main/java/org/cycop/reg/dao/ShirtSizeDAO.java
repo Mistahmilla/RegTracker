@@ -24,14 +24,14 @@ public class ShirtSizeDAO {
 
     public List<ShirtSize> getShirtSize(){
         String sql = "SELECT * FROM T_SHIRT_SIZE";
-        return (List<ShirtSize>)jdbcTemplate.query(sql, shirtSizeMapper);
+        return jdbcTemplate.query(sql, shirtSizeMapper);
     }
 
     public List<ShirtSize> getShirtSize(String shirtSizeCode){
         String sql = "SELECT * FROM T_SHIRT_SIZE WHERE SHIRT_SIZE_C = ?";
         Object[] params = new Object[1];
         params[0] = shirtSizeCode;
-        return (List<ShirtSize>)jdbcTemplate.query(sql, params, shirtSizeMapper);
+        return jdbcTemplate.query(sql, params, shirtSizeMapper);
     }
 
 }

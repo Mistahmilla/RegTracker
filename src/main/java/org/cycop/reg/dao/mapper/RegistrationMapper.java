@@ -36,18 +36,18 @@ public class RegistrationMapper implements RowMapper<Registration> {
     public Registration mapRow(ResultSet resultSet, int i) throws SQLException {
         Registration r = new Registration();
         r.setProgram(programDAO.get(resultSet.getLong("PROGRAM_SID")).get(0));
-        r.setPerson(personDAO.get(resultSet.getLong("PER_SID")).get(0));
+        r.setPerson(personDAO.get(resultSet.getLong("PER_SID"), "", 0).get(0));
         r.setRegistrationDate(resultSet.getDate("REG_D").toLocalDate());
 
-        if(rankRepository.getRank(resultSet.getString("RANK_C")).get(0) != null) {
+        if(!rankRepository.getRank(resultSet.getString("RANK_C")).isEmpty()) {
             r.setRank(rankRepository.getRank(resultSet.getString("RANK_C")).get(0));
         }
 
-        if (gradeRepository.getGrade(resultSet.getString("GRADE_C")).get(0) != null) {
+        if (!gradeRepository.getGrade(resultSet.getString("GRADE_C")).isEmpty()) {
             r.setGrade(gradeRepository.getGrade(resultSet.getString("GRADE_C")).get(0));
         }
 
-        if(shirtSizeRepository.getShirtSizeByCode(resultSet.getString("SHIRT_SIZE_C")).get(0) != null) {
+        if(!shirtSizeRepository.getShirtSizeByCode(resultSet.getString("SHIRT_SIZE_C")).isEmpty()) {
             r.setShirtSize(shirtSizeRepository.getShirtSizeByCode(resultSet.getString("SHIRT_SIZE_C")).get(0));
         }
 

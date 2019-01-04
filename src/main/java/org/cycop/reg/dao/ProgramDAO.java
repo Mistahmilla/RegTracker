@@ -26,7 +26,7 @@ public class ProgramDAO {
         jdbcTemplate = new JdbcTemplate(dataSource);
     }
 
-    public List<Program> get(Long programID) {
+    public List<Program> get(long programID) {
         logger.info("Getting program: {}", programID);
         String sql = "SELECT * FROM T_PROGRAM WHERE PROGRAM_SID = ?";
         Object[] params = new Object[1];

@@ -1,8 +1,8 @@
 version: 0.0
 os: linux
 files:
-  - source: /
-    destination: /home/ec2-user
+  - source: ./
+    destination: /home/ec2-user/temp
 hooks:
   ApplicationStop:
     - location: RegTracker/src/main/resources/scripts/stop_application.sh

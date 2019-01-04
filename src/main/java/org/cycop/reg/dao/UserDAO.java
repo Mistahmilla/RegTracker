@@ -71,7 +71,7 @@ public class UserDAO {
         String insertSQL = "INSERT INTO T_ACNT (EML_AD_X, PWD_X, SALT_X, PER_SID, CRE_T, UPD_T) VALUES (?, ?, ?, ?, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);";
         String roleSQL = "INSERT INTO T_ACNT_ROLE (ACNT_SID, ROLE_C, ADD_D, CRE_T, UPD_T) VALUES (?, ?, NOW(), CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);";
 
-        Person per = personDAO.get(personDAO.saveOrUpdate(user.getPerson())).get(0);
+        Person per = personDAO.get(personDAO.saveOrUpdate(user.getPerson()), "", 0).get(0);
 
         if (Long.valueOf(user.getAccountID()) == null || user.getAccountID() == 0) {
             logger.info("Creating new user");

@@ -26,7 +26,7 @@ public class PersonMapper implements RowMapper<Person>{
         Person p = new Person();
         List<Address> a;
         p.setPersonID(resultSet.getLong("PER_SID"));
-        logger.info("Getting person: " + p.getPersonID());
+        logger.info("Getting person: {}", p.getPersonID());
         p.setFirstName(resultSet.getString("PER_FIRST_NM"));
         p.setLastName(resultSet.getString("PER_LAST_NM"));
         if(resultSet.getDate("BIRTH_D") != null) {

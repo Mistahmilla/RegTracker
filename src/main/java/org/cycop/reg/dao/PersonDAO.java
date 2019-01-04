@@ -14,6 +14,7 @@ import org.springframework.stereotype.Component;
 
 import javax.sql.DataSource;
 import java.sql.*;
+import java.util.ArrayList;
 import java.util.List;
 
 @Component
@@ -38,7 +39,7 @@ public class PersonDAO {
             genderCode = person.getGender().getGenderCode();
         }
 
-        if(person.getPersonID() != null){
+        if(person.getPersonID() != 0){
             logger.info("Updating person: {}", person.getPersonID());
             String sql = "UPDATE T_PER SET PER_FIRST_NM = ?, PER_LAST_NM = ?, SEX_C = ?, BIRTH_D = ?, UPD_T = CURRENT_TIMESTAMP WHERE PER_SID = ?;";
             jdbcTemplate.update(sql, person.getFirstName(), person.getLastName(), genderCode, Date.valueOf(person.getBirthDate()), person.getPersonID());
@@ -70,44 +71,41 @@ public class PersonDAO {
         }
     }
 
-    public void delete(Long personId) {
+    public void delete(long personId) {
         logger.info("Deleting person: {}", personId);
         String sql = "DELETE FROM T_PER WHERE PER_SID = ?";
         jdbcTemplate.update(sql, personId);
     }
 
-    public List<Person> get(Long personId) {
-        logger.info("Getting person: {}", personId);
-        String sql = "SELECT * FROM T_PER WHERE PER_SID = ?";
-        Object[] params = new Object[1];
-        params[0] = personId;
-        return jdbcTemplate.query(sql, params, personMapper);
-    }
-
-    public List<Person> get(String personName){
-        logger.info("Getting person by name");
-        String nameParameter = personName;
-        Object[] params = new Object[1];
-        if (nameParameter != null){
-            nameParameter = "%".concat(nameParameter.concat("%"));
-        }
-        params[0] = nameParameter;
-        String sql = "SELECT * FROM T_PER WHERE CONCAT(PER_FIRST_NM, ' ', PER_LAST_NM) LIKE ?";
-        return jdbcTemplate.query(sql, params, personMapper);
-    }
-
-    public List<Person> getByAccountID(Long accountID){
-        logger.info("Getting person by account: {}", accountID);
-        Object[] params = new Object[1];
-        params[0] = accountID;
-        String sql = "SELECT * FROM T_PER WHERE PER_SID IN (SELECT PER_SID FROM T_ACNT_PER WHERE ACNT_SID = ? AND ACTIVE_PER_I = 'Y')";
-        return jdbcTemplate.query(sql, params, personMapper);
-    }
-
-    public List<Person> get(){
-        logger.info("Getting all people");
+    public List<Person> get(long personID, String personName, long accountID){
         String sql = "SELECT * FROM T_PER";
-        return jdbcTemplate.query(sql, personMapper);
+
+        List params = new ArrayList();
+
+        if(personID != 0){
+            sql = addWhere(sql);
+            sql = sql.concat(" PER_SID = ?");
+            params.add(personID);
+        }
+        if(!personName.isEmpty()){
+            sql = addWhere(sql);
+            sql = sql.concat(" CONCAT(PER_FIRST_NM, ' ', PER_LAST_NM) LIKE ?");
+            params.add(personName);
+        }
+        if(accountID != 0){
+            sql = addWhere(sql);
+            sql = sql.concat(" PER_SID IN (SELECT PER_SID FROM T_ACNT_PER WHERE ACNT_SID = ? AND ACTIVE_PER_I = 'Y')");
+            params.add(accountID);
+        }
+        return jdbcTemplate.query(sql, params.toArray(), personMapper);
+    }
+
+    private String addWhere(String inputSQL){
+        if (!inputSQL.contains("WHERE")){
+            return inputSQL.concat(" WHERE");
+        }else {
+            return inputSQL.concat(" AND");
+        }
     }
 
 }

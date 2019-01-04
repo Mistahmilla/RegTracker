@@ -6,7 +6,12 @@ public class Grade extends DataObject {
     private String gradeDescription;
     private int sortOrder;
 
+    public Grade(){
+
+    }
+
     public Grade(String gradeCode, String gradeDescription, int sortOrder){
+        this();
         this.gradeCode = gradeCode;
         this.gradeDescription = gradeDescription;
         this.sortOrder = sortOrder;
