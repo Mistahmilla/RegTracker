@@ -41,6 +41,12 @@ public class PersonMapper implements RowMapper<Person>{
         if(resultSet.getTimestamp("UPD_T") != null){
             p.setUpdateTime(resultSet.getTimestamp("UPD_T").toLocalDateTime());
         }
+        if(resultSet.getString("EML_AD_X") != null){
+            p.setEmailAddress(resultSet.getString("EML_AD_X"));
+        }
+        if(resultSet.getString("PHONE_NUM") != null){
+            p.setPhoneNumber(resultSet.getString("PHONE_NUM"));
+        }
         a = addressDAO.get(p.getPersonID());
         if (a.size()==1){
             p.setCurrentAddress(a.get(0));

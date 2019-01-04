@@ -41,12 +41,12 @@ public class PersonDAO {
 
         if(person.getPersonID() != 0){
             logger.info("Updating person: {}", person.getPersonID());
-            String sql = "UPDATE T_PER SET PER_FIRST_NM = ?, PER_LAST_NM = ?, SEX_C = ?, BIRTH_D = ?, UPD_T = CURRENT_TIMESTAMP WHERE PER_SID = ?;";
-            jdbcTemplate.update(sql, person.getFirstName(), person.getLastName(), genderCode, Date.valueOf(person.getBirthDate()), person.getPersonID());
+            String sql = "UPDATE T_PER SET PER_FIRST_NM = ?, PER_LAST_NM = ?, SEX_C = ?, BIRTH_D = ?, PHONE_NUM = ?, EML_AD_X = ?, UPD_T = CURRENT_TIMESTAMP WHERE PER_SID = ?;";
+            jdbcTemplate.update(sql, person.getFirstName(), person.getLastName(), genderCode, Date.valueOf(person.getBirthDate()), person.getPhoneNumber(), person.getEmailAddress(), person.getPersonID());
             return person.getPersonID();
         }else{
             KeyHolder keyHolder = new GeneratedKeyHolder();
-            String sql = "INSERT INTO T_PER (PER_FIRST_NM, PER_LAST_NM, SEX_C, BIRTH_D, CRE_T, UPD_T) VALUES (?, ?, ?, ?, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);";
+            String sql = "INSERT INTO T_PER (PER_FIRST_NM, PER_LAST_NM, SEX_C, BIRTH_D, PHONE_NUM, EML_AD_X, CRE_T, UPD_T) VALUES (?, ?, ?, ?, ?, ?, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);";
             jdbcTemplate.update(new PreparedStatementCreator() {
                 @Override
                 public PreparedStatement createPreparedStatement(Connection connection) throws SQLException {
@@ -62,6 +62,16 @@ public class PersonDAO {
                         p.setNull(4, Types.NULL);
                     }else{
                         p.setDate(4, Date.valueOf(person.getBirthDate()));
+                    }
+                    if(person.getPhoneNumber() == null){
+                        p.setNull(5, Types.NULL);
+                    }else{
+                        p.setString(5, person.getPhoneNumber());
+                    }
+                    if(person.getEmailAddress() == null){
+                        p.setNull(6, Types.NULL);
+                    }else{
+                        p.setString(6, person.getEmailAddress());
                     }
                     return p;
                 }
