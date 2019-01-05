@@ -23,5 +23,11 @@ public class PersonValidator implements Validator {
         if(p.getLastName()!= null && p.getLastName().length()>45){
             errors.rejectValue("lastName", "firstName.length", "The last name can not exceed 45 characters.");
         }
+        if(p.getPhoneNumber() !=null && p.getPhoneNumber().length()>14){
+            errors.rejectValue("phoneNumber", "phoneNumber.length", "The phone number can not exceed 14 characters.");
+        }
+        if(p.getEmailAddress() !=null && p.getEmailAddress().length()>45){
+            errors.rejectValue("emailAddress", "emailAddress.length", "The email address can not exceed 45 characters.");
+        }
     }
 }

@@ -72,4 +72,26 @@ public class PersonValidatorTest {
         ValidationUtils.invokeValidator(v, p, errors);
         assertTrue(errors.hasErrors());
     }
+
+    @Test
+    public void emailAddressTest(){
+        Person p = new Person();
+        p.setFirstName("John");
+        p.setLastName("Smith");
+        p.setEmailAddress("sjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjslssskljsfjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjj");
+        BindException errors = new BindException(p, "emailAddress");
+        ValidationUtils.invokeValidator(v, p, errors);
+        assertTrue(errors.hasErrors());
+    }
+
+    @Test
+    public void phoneNumberTest(){
+        Person p = new Person();
+        p.setFirstName("John");
+        p.setLastName("Smith");
+        p.setPhoneNumber("sjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjslssskljsfjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjj");
+        BindException errors = new BindException(p, "phoneNumber");
+        ValidationUtils.invokeValidator(v, p, errors);
+        assertTrue(errors.hasErrors());
+    }
 }
