@@ -8,7 +8,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.PreparedStatementCreator;
-import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Component;
 
@@ -28,6 +27,9 @@ public class PersonDAO {
     private PersonMapper personMapper;
 
     @Autowired
+    private KeyHolderFactory keyHolderFactory;
+
+    @Autowired
     public void init(DataSource dataSource){
         jdbcTemplate = new JdbcTemplate(dataSource);
     }
@@ -45,7 +47,7 @@ public class PersonDAO {
             jdbcTemplate.update(sql, person.getFirstName(), person.getLastName(), genderCode, Date.valueOf(person.getBirthDate()), person.getPhoneNumber(), person.getEmailAddress(), person.getPersonID());
             return person.getPersonID();
         }else{
-            KeyHolder keyHolder = new GeneratedKeyHolder();
+            KeyHolder keyHolder = keyHolderFactory.newKeyHolder();
             String sql = "INSERT INTO T_PER (PER_FIRST_NM, PER_LAST_NM, SEX_C, BIRTH_D, PHONE_NUM, EML_AD_X, CRE_T, UPD_T) VALUES (?, ?, ?, ?, ?, ?, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);";
             jdbcTemplate.update(new PreparedStatementCreator() {
                 @Override
