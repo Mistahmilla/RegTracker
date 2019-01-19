@@ -25,6 +25,8 @@ public class PersonTest {
         p.setGender("F");
         p.setCreateTime(LocalDateTime.of(2001, 9, 11, 5, 11, 15, 10));
         p.setUpdateTime(LocalDateTime.of(2001, 9, 11, 5, 12, 15, 10));
+        p.setPhoneNumber("phone");
+        p.setEmailAddress("email");
         assertEquals("John", p.getFirstName());
         assertEquals("Smith", p.getLastName());
         assertEquals("Smith, John", p.toString());
@@ -36,6 +38,8 @@ public class PersonTest {
         assertEquals(LocalDateTime.of(2001, 9, 11, 5, 11, 15, 10), p.getCreateTime());
         assertEquals(LocalDateTime.of(2001, 9, 11, 5, 12, 15, 10), p.getUpdateTime());
         assertEquals(a, p.getCurrentAddress());
+        assertEquals("phone", p.getPhoneNumber());
+        assertEquals("email", p.getEmailAddress());
     }
 
 }
