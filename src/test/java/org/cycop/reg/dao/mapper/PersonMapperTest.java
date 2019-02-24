@@ -1,6 +1,6 @@
 package org.cycop.reg.dao.mapper;
 
-import org.cycop.reg.dao.AddressDAO;
+import org.cycop.reg.dao.PersonAddressDAO;
 import org.cycop.reg.dataobjects.Person;
 import org.junit.Before;
 import org.junit.Test;
@@ -20,7 +20,7 @@ import static junit.framework.TestCase.assertEquals;
 public class PersonMapperTest {
 
     @Mock
-    AddressDAO addressDAO;
+    PersonAddressDAO personAddressDAO;
 
     @InjectMocks
     PersonMapper pm;
