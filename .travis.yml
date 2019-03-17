@@ -14,15 +14,12 @@ script:
   mvn clean org.jacoco:jacoco-maven-plugin:prepare-agent install sonar:sonar
 deploy:
   provider: codedeploy
-  access_key_id: $AWS_ACCESS_KEY
-  secret_access_key: $AWS_KEY_ID
-  bucket: "cycop"
+  access_key_id: $AWS_KEY_ID
+  secret_access_key: $AWS_ACCESS_KEY
+  bucket: cycop
   key: latest/MyApp.zip
   bundle_type: zip
   application: RegTracker
   deployment_group: RegTracker
   on:
-    all_branches: true
-
-
-
+    branch: develop
