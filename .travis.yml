@@ -14,8 +14,8 @@ script:
   mvn clean org.jacoco:jacoco-maven-plugin:prepare-agent install sonar:sonar
 deploy:
   - provider: s3
-    access_key_id: $AWS_ACCESS_KEY
-    secret_access_key: $AWS_KEY_ID
+    access_key_id: $AWS_KEY_ID
+    secret_access_key: $AWS_ACCESS_KEY
     local_dir: dpl_cd_upload
     skip_cleanup: true
     on:
@@ -24,8 +24,8 @@ deploy:
     bucket: cycop
     region: us-east-1
   - provider: codedeploy
-    access_key_id: $AWS_ACCESS_KEY
-    secret_access_key: $AWS_KEY_ID
+    access_key_id: $AWS_KEY_ID
+    secret_access_key: $AWS_ACCESS_KEY
     bucket: cycop
     key: latest.zip
     bundle_type: zip
