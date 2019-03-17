@@ -31,7 +31,8 @@ deploy:
     application: RegTracker
     deployment_group: RegTracker
     region: us-east-1
-    on: *2
+    on:
+      branch: develop
 script:
   - zip -r latest *
   - mkdir -p dpl_cd_upload
