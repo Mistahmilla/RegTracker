@@ -6,7 +6,7 @@
 
     <properties>
         <java.version>1.8</java.version>
-        <spring.version>5.0.5.RELEASE</spring.version>
+        <spring.version>5.1.5.RELEASE</spring.version>
         <cglib.version>3.2.6</cglib.version>
         <jettyVersion>9.4.12.RC0</jettyVersion>
         <mainApplication>org.cycop.reg.Application</mainApplication>
@@ -53,7 +53,7 @@
         <dependency>
             <groupId>org.mockito</groupId>
             <artifactId>mockito-core</artifactId>
-            <version>2.24.5</version>
+            <version>2.25.0</version>
             <scope>test</scope>
         </dependency>
 
