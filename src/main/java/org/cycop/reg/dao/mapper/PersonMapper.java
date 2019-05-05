@@ -1,6 +1,6 @@
 package org.cycop.reg.dao.mapper;
 
-import org.cycop.reg.dao.AddressDAO;
+import org.cycop.reg.dao.PersonAddressDAO;
 import org.cycop.reg.dataobjects.Address;
 import org.cycop.reg.dataobjects.Person;
 import org.slf4j.Logger;
@@ -17,7 +17,7 @@ import java.util.List;
 public class PersonMapper implements RowMapper<Person>{
 
     @Autowired
-    private AddressDAO addressDAO;
+    private PersonAddressDAO personAddressDAO;
 
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
@@ -41,7 +41,13 @@ public class PersonMapper implements RowMapper<Person>{
         if(resultSet.getTimestamp("UPD_T") != null){
             p.setUpdateTime(resultSet.getTimestamp("UPD_T").toLocalDateTime());
         }
-        a = addressDAO.get(p.getPersonID());
+        if(resultSet.getString("EML_AD_X") != null){
+            p.setEmailAddress(resultSet.getString("EML_AD_X"));
+        }
+        if(resultSet.getString("PHONE_NUM") != null){
+            p.setPhoneNumber(resultSet.getString("PHONE_NUM"));
+        }
+        a = personAddressDAO.get(p.getPersonID());
         if (a.size()==1){
             p.setCurrentAddress(a.get(0));
         }

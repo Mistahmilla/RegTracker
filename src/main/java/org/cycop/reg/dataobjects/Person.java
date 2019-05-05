@@ -19,6 +19,8 @@ public class Person extends DataObject {
     private long personID;
     private Gender gender;
     private Address currentAddress;
+    private String emailAddress;
+    private String phoneNumber;
 
     public enum Gender {
         M("M","Male") , F("F","Female");
@@ -96,4 +98,19 @@ public class Person extends DataObject {
         return currentAddress;
     }
 
+    public void setEmailAddress(String emailAddress){
+        this.emailAddress = emailAddress;
+    }
+
+    public String getEmailAddress(){
+        return emailAddress;
+    }
+
+    public void setPhoneNumber(String phoneNumber){
+        this.phoneNumber = phoneNumber;
+    }
+
+    public String getPhoneNumber(){
+        return phoneNumber;
+    }
 }

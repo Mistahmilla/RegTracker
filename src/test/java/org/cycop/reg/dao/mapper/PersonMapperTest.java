@@ -1,6 +1,6 @@
 package org.cycop.reg.dao.mapper;
 
-import org.cycop.reg.dao.AddressDAO;
+import org.cycop.reg.dao.PersonAddressDAO;
 import org.cycop.reg.dataobjects.Person;
 import org.junit.Before;
 import org.junit.Test;
@@ -20,7 +20,7 @@ import static junit.framework.TestCase.assertEquals;
 public class PersonMapperTest {
 
     @Mock
-    AddressDAO addressDAO;
+    PersonAddressDAO personAddressDAO;
 
     @InjectMocks
     PersonMapper pm;
@@ -40,15 +40,19 @@ public class PersonMapperTest {
             Mockito.when(rs.getString("PER_LAST_NM")).thenReturn("last");
             Mockito.when(rs.getDate("BIRTH_D")).thenReturn(Date.valueOf(LocalDate.now()));
             Mockito.when(rs.getString("SEX_C")).thenReturn("F");
+            Mockito.when(rs.getString("EML_AD_X")).thenReturn("test@test.com");
+            Mockito.when(rs.getString("PHONE_NUM")).thenReturn("(123) 456-7890");
             Mockito.when(rs.getTimestamp("CRE_T")).thenReturn(Timestamp.valueOf(LocalDateTime.now()));
             Mockito.when(rs.getTimestamp("UPD_T")).thenReturn(Timestamp.valueOf(LocalDateTime.now()));
             Mockito.when(rs.next()).thenReturn(true).thenReturn(false);
             p = pm.mapRow(rs, 1);
 
-            assertEquals((long)1,(long)p.getPersonID());
+            assertEquals(1,p.getPersonID());
             assertEquals("first",p.getFirstName());
             assertEquals("last",p.getLastName());
             assertEquals("F",p.getGender().getGenderCode());
+            assertEquals("test@test.com", p.getEmailAddress());
+            assertEquals("(123) 456-7890", p.getPhoneNumber());
         }catch(Exception e){
             assert(false);
         }
