@@ -5,7 +5,7 @@ files:
     destination: /home/ec2-user/temp
 hooks:
   ApplicationStop:
-    - location: src/main/resources/scripts/stop_application.sh
+    - location: src/main/resources/scripts/stop-application.sh
       timeout: 300
       runas: root
   ApplicationStart:
